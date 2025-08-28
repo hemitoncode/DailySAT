@@ -109,7 +109,7 @@ const Hero = () => {
         viewport={{ once: true }}
       ><span>Whether you're </span>
         <span
-          className="relative inline-flex w-80 h-[2em] items-center justify-center overflow-hidden bg-white/20 border border-white/40 backdrop-blur-md shadow-lg rounded-md px-4 mx-1"
+          className="relative inline-flex h-[2em] items-center justify-center overflow-hidden bg-white/20 border border-white/40 backdrop-blur-md shadow-lg rounded-md px-4 mx-1"
         >
           <AnimatePresence mode="wait">
             <motion.span
