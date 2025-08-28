@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ArrowSvg from '@/components/common/icons/ArrowSVG';
 import Link from 'next/link';
 import { Button } from '@/components/common/Button';
-import { init } from 'next/dist/compiled/webpack/webpack';
-import { initialize } from 'next/dist/server/lib/render-server';
 import GradientUnderline from '@/components/ui/GradientUnderline';
 
 const Hero = () => {
