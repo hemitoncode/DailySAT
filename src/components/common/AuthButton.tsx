@@ -15,7 +15,7 @@ const AuthButton = () => {
   }, []);
 
   const handleToggleStatus = () => {
-    setStatus((prevStatus) => !prevStatus);
+    setStatus(prevStatus => !prevStatus);
   };
 
   return (
