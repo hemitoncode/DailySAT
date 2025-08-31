@@ -30,13 +30,5 @@ export const teamMember = [
     src: "/people/gautham.png",
     quote:
       "Hey, I'm Gautham, a current student at COC and I just want to have fun.",
-  },
-  {
-    name: "Devesh Khilnani",
-    linkedIn: "https://www.linkedin.com/in/dkhilnani/",
-    designation: "Chief Business Officer",
-    src: "/people/devesh.png",
-    quote:
-      "I am a 17 year old high school and college student with a passion for R&D, business, & medicine. I love putting my energy and using my experience to every project, as I consistently seek new challenges.",
-  },
+  }
 ];
