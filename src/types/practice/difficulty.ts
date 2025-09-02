@@ -1,1 +1,0 @@
-export type Difficulty = "All" | "Easy" | "Medium" | "Hard"

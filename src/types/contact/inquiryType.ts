@@ -1,1 +1,0 @@
-export type inquiryType = "General Inquiry" | "Partnership" | "Support" | "Other";
