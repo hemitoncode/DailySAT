@@ -14,33 +14,31 @@ if (
 // Global client connection cache for serverless environment
 declare global {
   var _mongoClient: MongoClient | undefined;
+  var _mongoClientPromise: Promise<MongoClient>;
 }
 
-let client: MongoClient;
+const clientOptions = {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+  // Add retry options for better resilience
+  retryWrites: true,
+  maxPoolSize: 10,
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+};
 
-if (process.env.NODE_ENV === "production") {
-  // In production, use the global cache
-  if (!global._mongoClient) {
-    global._mongoClient = new MongoClient(mongoUrl, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      },
-    });
-  }
-  client = global._mongoClient;
-} else {
-  // In development, create a new client each time
-  client = new MongoClient(mongoUrl, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
+// Initialize the client and connection promise
+if (!global._mongoClient) {
+  global._mongoClient = new MongoClient(mongoUrl, clientOptions);
+  global._mongoClientPromise = global._mongoClient.connect();
 }
 
-export { client };
+const client = global._mongoClient;
+const clientPromise = global._mongoClientPromise;
+
+export { client, clientPromise };
 
 export const db = client.db("DailySAT");
