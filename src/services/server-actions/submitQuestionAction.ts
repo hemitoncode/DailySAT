@@ -1,15 +1,13 @@
 "use server";
 
 import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
-import { client } from "@/services/database/mongo";
+import { client, db } from "@/services/database/mongo";
 import { handleGetSession } from "@/services/auth/auth/authActions";
 import { Investor } from "@/features/shop/types/investor";
 import { determineLeague } from "@/services/leaderboard/leaderboard/determineLeague";
 import { updateLeaderboard } from "@/services/leaderboard/leaderboard/updateLeaderboard";
 export const handleSubmitQuestion = async (isCorrect: boolean) => {
   try {
-    await client.connect();
-
     const session = await handleGetSession();
     const email = session?.user?.email;
 
@@ -17,7 +15,6 @@ export const handleSubmitQuestion = async (isCorrect: boolean) => {
       throw new Error("User email not found in session.");
     }
 
-    const db = client.db("DailySAT");
     const usersColl = db.collection("users");
     let investorRewardBonus = 0;
 
@@ -59,8 +56,6 @@ export const handleSubmitQuestion = async (isCorrect: boolean) => {
       // Update leaderboard
       await updateLeaderboard(db, league, userData);
     }
-
-    await client.close();
 
     return {
       status: 200,

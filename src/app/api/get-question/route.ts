@@ -1,7 +1,13 @@
-import { englishSubjectsArray, mathSubjectsArray } from "@/features/practice/data/subject";
+import {
+  englishSubjectsArray,
+  mathSubjectsArray,
+} from "@/features/practice/data/subject";
 import { client, db } from "@/services/database/mongo";
 import { MatchObject } from "@/shared/types/match-query";
-import { EnglishSubjects, MathSubjects } from "@/features/practice/types/subject";
+import {
+  EnglishSubjects,
+  MathSubjects,
+} from "@/features/practice/types/subject";
 
 export const GET = async (request: Request) => {
   const { searchParams } = new URL(request.url);
@@ -29,8 +35,6 @@ export const GET = async (request: Request) => {
   }
 
   try {
-    await client.connect();
-
     const collectionName = type === "math" ? "math" : "english";
     const collection = db.collection(collectionName);
 
@@ -53,14 +57,14 @@ export const GET = async (request: Request) => {
       {
         questionMeta,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return Response.json(
       {
         result: "Server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

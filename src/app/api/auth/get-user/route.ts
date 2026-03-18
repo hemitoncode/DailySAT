@@ -1,5 +1,5 @@
 import { handleGetSession } from "@/services/auth/auth/authActions";
-import { client } from "@/services/database/mongo";
+import { db } from "@/services/database/mongo";
 import { NextResponse } from "next/server";
 import { handleRatelimitSuccess } from "@/services/rate-limiter";
 
@@ -89,39 +89,37 @@ export const GET = async () => {
 
   const rateLimitStatus = await handleRatelimitSuccess(email as string);
 
-    try {
-        if (rateLimitStatus === "reached") {
-            throw new Error("Rate limit reached. Please try again later.");
-        }
+  try {
+    if (rateLimitStatus === "reached") {
+      throw new Error("Rate limit reached. Please try again later.");
+    }
 
-        await client.connect();
-        const db = client.db("DailySAT");
-        const usersCollection = db.collection("users");
+    const usersCollection = db.collection("users");
 
-        // Find the user
-        let user = await usersCollection.findOne({ email: session?.user.email });
+    // Find the user
+    let user = await usersCollection.findOne({ email: session?.user.email });
 
-        // If user doesn't exist, create a new record
-        if (!user) {
-            const newUser = {
-                email: session?.user.email,
-                name: session?.user.name,
-                image: session?.user.image,
-                id: session?.user.id,
-                currency: 0,
-                wrongAnswered: 0,
-                correctAnswered: 0,
-                isReferred: false,
-                itemsBought: []
-            };
+    // If user doesn't exist, create a new record
+    if (!user) {
+      const newUser = {
+        email: session?.user.email,
+        name: session?.user.name,
+        image: session?.user.image,
+        id: session?.user.id,
+        currency: 0,
+        wrongAnswered: 0,
+        correctAnswered: 0,
+        isReferred: false,
+        itemsBought: [],
+      };
 
-            const result = await usersCollection.insertOne(newUser);
-            // Retrieve the newly created user for returning
-            user = await usersCollection.findOne({ _id: result.insertedId });
-        }
-        
-      return NextResponse.json({ user });
-    } catch (error) {
-      return NextResponse.json({ error });
+      const result = await usersCollection.insertOne(newUser);
+      // Retrieve the newly created user for returning
+      user = await usersCollection.findOne({ _id: result.insertedId });
+    }
+
+    return NextResponse.json({ user });
+  } catch (error) {
+    return NextResponse.json({ error });
   }
 };

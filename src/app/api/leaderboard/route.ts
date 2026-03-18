@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { client } from "@/services/database/mongo";
-import { Db } from "mongodb";
+import { db } from "@/services/database/mongo";
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,18 +9,16 @@ export async function GET(request: NextRequest) {
     if (!league) {
       return NextResponse.json(
         { error: "League parameter is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const validLeagues = ["Bronze", "Silver", "Gold", "Platinum"];
     if (!validLeagues.includes(league)) {
       return NextResponse.json(
         { error: "Invalid league parameter" },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    await client.connect();
-    const db: Db = client.db("DailySAT");
 
     const leaderboardData = await db
       .collection("leaderboard")
@@ -36,9 +33,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch leaderboard data" },
-      { status: 500 }
+      { status: 500 },
     );
-  } finally {
-    await client.close();
   }
 }

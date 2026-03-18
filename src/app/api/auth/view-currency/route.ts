@@ -1,4 +1,4 @@
-import { client } from "@/services/database/mongo";
+import { db } from "@/services/database/mongo";
 
 /**
  * @swagger
@@ -63,34 +63,29 @@ import { client } from "@/services/database/mongo";
  */
 
 export const GET = async (request: Request) => {
-    const url: URL = new URL(request.url);
-    const searchParams: URLSearchParams = new URLSearchParams(url.search);
-    const userEmail: string = searchParams.get("email") || "";
+  const url: URL = new URL(request.url);
+  const searchParams: URLSearchParams = new URLSearchParams(url.search);
+  const userEmail: string = searchParams.get("email") || "";
 
-    if (userEmail === "") {
-        return Response.json({
-            code: 400,
-            message: "bad request. make sure to specify the email parameter"
-        })
+  if (userEmail === "") {
+    return Response.json({
+      code: 400,
+      message: "bad request. make sure to specify the email parameter",
+    });
+  } else {
+    try {
+      const result = db.collection("users").find({ email: userEmail });
+      const allValues = await result.toArray();
+
+      return Response.json({
+        code: 200,
+        currency: allValues[0].currency,
+      });
+    } catch {
+      return Response.json({
+        code: 500,
+        message: "database error",
+      });
     }
-    else {
-        try {
-            await client.connect();
-            const db = client.db("DailySAT");
-
-            const result = db.collection("users").find({ email: userEmail });
-            const allValues = await result.toArray();
-
-            return Response.json({
-                code: 200,
-                currency: allValues[0].currency
-            })
-        }
-        catch {
-            return Response.json({
-                code: 500,
-                message: "database error"
-            });
-        }
-    }
-}
+  }
+};

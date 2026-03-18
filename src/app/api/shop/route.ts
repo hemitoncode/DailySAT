@@ -1,6 +1,5 @@
 import { ShopItem } from "@/features/shop/types/shopItem";
-import { client } from "@/services/database/mongo";
-import { Db } from "mongodb";
+import { db } from "@/services/database/mongo";
 import { User } from "@/shared/types/user"; // assume you saved the User interface here
 import { format } from "date-fns";
 import { handleGetSession } from "@/services/auth/auth/authActions";
@@ -20,9 +19,6 @@ export const POST = async (request: Request) => {
   }
 
   try {
-    await client.connect();
-    const db: Db = client.db("DailySAT");
-
     const users = db.collection<User>("users");
     // Proceed with the rest of the logic
     const session = await handleGetSession();
@@ -51,11 +47,11 @@ export const POST = async (request: Request) => {
         $set: {
           currency: coins - totalCost,
         },
-      }
+      },
     );
 
     let investors = items.filter((elem: ShopItem) =>
-      elem.name.includes("Investor")
+      elem.name.includes("Investor"),
     );
 
     // If there are investor items, log them intok the DB
@@ -75,7 +71,7 @@ export const POST = async (request: Request) => {
                 : elem.name.includes("II")
                   ? 10
                   : 5,
-          })
+          }),
       );
 
       await users.updateOne(
@@ -86,7 +82,7 @@ export const POST = async (request: Request) => {
               $each: investors,
             },
           },
-        }
+        },
       );
     }
 
@@ -103,7 +99,5 @@ export const POST = async (request: Request) => {
     return Response.json({
       result: "DB Error",
     });
-  } finally {
-    await client.close();
   }
 };
