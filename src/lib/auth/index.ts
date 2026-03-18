@@ -5,10 +5,11 @@ import { client } from "../mongo";
 const db = client.db();
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
   socialProviders: {
     google: {
-      clientId: process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID as string,
-      clientSecret: process.env.NEXT_PUBLIC_AUTH_GOOGLE_SECRET as string,
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     },
   },
 
@@ -17,7 +18,7 @@ export const auth = betterAuth({
   user: {
     modelName: "users",
     fields: {
-      id: "_id",     
+      id: "_id",
       name: "name",
       email: "email",
       image: "image",
@@ -52,7 +53,7 @@ export const auth = betterAuth({
         type: "number",
         required: true,
         defaultValue: 0,
-      }
+      },
     },
-  }
+  },
 });
