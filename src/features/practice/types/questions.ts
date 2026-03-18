@@ -1,7 +1,6 @@
 export type Question = {
   id: string;
   domain: string;
-  visuals: { type: string; svg_content: string };
   question: {
     choices: Record<string, string>;
     question: string;
@@ -26,10 +25,6 @@ export interface QuestionData {
     _id: string;
     key: string;
     id: string;
-    visuals: {
-      type: string;
-      svg_content: string;
-    };
     question: {
       choices: Record<string, string>;
       question: string;

@@ -1,7 +1,6 @@
 export type Question = {
   id: string;
   domain: string;
-  visuals: { type: string; svg_content: string };
   question: {
     choices: Record<string, string>;
     question: string;
