@@ -6,6 +6,7 @@ const db = client.db();
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: ["https://dailysat.vercel.app"],
   socialProviders: {
     google: {
       clientId: process.env.AUTH_GOOGLE_ID as string,
