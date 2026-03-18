@@ -2,7 +2,7 @@ import {
   englishSubjectsArray,
   mathSubjectsArray,
 } from "@/features/practice/data/subject";
-import { client, db } from "@/services/database/mongo";
+import { db } from "@/services/database/mongo";
 import { MatchObject } from "@/shared/types/match-query";
 import {
   EnglishSubjects,

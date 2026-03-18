@@ -1,7 +1,7 @@
 "use server";
 
 import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
-import { client, db } from "@/services/database/mongo";
+import { db } from "@/services/database/mongo";
 import { handleGetSession } from "@/services/auth/auth/authActions";
 import { Investor } from "@/features/shop/types/investor";
 import { determineLeague } from "@/services/leaderboard/leaderboard/determineLeague";

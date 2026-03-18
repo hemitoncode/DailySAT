@@ -2,15 +2,6 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { client } from "@/services/database/mongo";
 
-// Ensure client is connected before using it
-let isConnected = false;
-const connectClient = async () => {
-  if (!isConnected) {
-    await client.connect();
-    isConnected = true;
-  }
-};
-
 const db = client.db();
 
 export const auth = betterAuth({
