@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react";
-import { signIn } from "@/lib/auth/authClient";
+import { signIn } from "@/services/auth/auth/authClient";
 
 const GoogleSignInPage: React.FC = () => {
   useEffect(() => {

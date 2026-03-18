@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Footer from "@/components/common/Footer";
-import ErrorBoundary from "@/components/common/ErrorBoundary";
-import { copyEmailToClipboard } from "@/lib/contact/mail";
+import Footer from "@/shared/components/Footer";
+import ErrorBoundary from "@/shared/components/ErrorBoundary";
+import { copyEmailToClipboard } from "@/services/contact/mail";
 
 interface FormData {
   first_name: string;

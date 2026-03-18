@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import StatDisplay from "@/components/features/Dashboard/StatDisplay";
-import Option from "@/components/features/Dashboard/Option";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import StatDisplay from "@/features/dashboard/components/StatDisplay";
+import Option from "@/features/dashboard/components/Option";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Book, Calendar, Sigma } from "lucide-react";
-import { useUserStore } from "@/store/user";
-import { User } from "@/types/user";
-import { DisplayBanner } from "@/types/dashboard/banner";
-import RedeemReferral from "@/components/features/Dashboard/RedeemReferral";
+import { useUserStore } from "@/stores/user";
+import { User } from "@/shared/types/user";
+import { DisplayBanner } from "@/features/dashboard/types/banner";
+import RedeemReferral from "@/features/dashboard/components/RedeemReferral";
 import { toast } from "react-toastify";
 
 const Home = () => {

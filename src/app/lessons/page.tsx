@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef, useReducer } from "react";
-import content from "@/data/lessons/lessoncontent";
-import FinalQuiz from "@/components/features/lessons/FinalQuiz";
+import content from "@/features/lessons/data/lessoncontent";
+import FinalQuiz from "@/features/lessons/components/FinalQuiz";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { toast } from "react-toastify";
 
 // 3D flip effect

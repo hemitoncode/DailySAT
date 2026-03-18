@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import 'katex/dist/katex.min.css';
-import Providers from "@/components/common/Providers";
+import Providers from "@/shared/components/Providers";
 
 export const metadata: Metadata = {
   title: "DailySAT",

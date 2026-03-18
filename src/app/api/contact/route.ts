@@ -1,5 +1,5 @@
-import { transporter } from "@/lib/nodemailer";
-import { handleGetContactEmailContent } from "@/lib/nodemailer/emailTemplates";
+import { transporter } from "@/services/email/nodemailer";
+import { handleGetContactEmailContent } from "@/services/email/nodemailer/emailTemplates";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

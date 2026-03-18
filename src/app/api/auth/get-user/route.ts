@@ -1,7 +1,7 @@
-import { handleGetSession } from "@/lib/auth/authActions";
-import { client } from "@/lib/mongo";
+import { handleGetSession } from "@/services/auth/auth/authActions";
+import { client } from "@/services/database/mongo";
 import { NextResponse } from "next/server";
-import { handleRatelimitSuccess } from "@/lib/rate-limiter";
+import { handleRatelimitSuccess } from "@/services/rate-limiter";
 
 /**
  * @swagger

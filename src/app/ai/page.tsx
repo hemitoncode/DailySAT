@@ -3,9 +3,9 @@
 
 import type React from "react"
 import { useState } from "react"
-import { generateStudyPlan } from "@/lib/ai/generateStudyPlan"
-import { StudyPlan } from "@/components/features/AI-Planner/StudyPlan"
-import { StudyPlanData, StudyDay, DebugPlan, ValidPlan } from "@/types/ai-planner/ai"
+import { generateStudyPlan } from "@/services/ai/ai/generateStudyPlan"
+import { StudyPlan } from "@/features/ai-planner/components/StudyPlan"
+import { StudyPlanData, StudyDay, DebugPlan, ValidPlan } from "@/features/ai-planner/types/ai"
 import {toast} from "react-toastify"
 
 const AI = () => {

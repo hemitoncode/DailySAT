@@ -1,7 +1,7 @@
 import React from "react";
-import { AnimatedTeamCard } from "@/components/features/About/AnimatedTeamCard";
+import { AnimatedTeamCard } from "@/features/team/components/AnimatedTeamCard";
 import "./team.css";
-import { teamMember } from "@/data/team";
+import { teamMember } from "@/features/team/data/index";
 
 const About = () => {
   const text = "Our Executives";

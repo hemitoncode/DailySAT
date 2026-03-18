@@ -1,9 +1,9 @@
-import { ShopItem } from "@/types/shop/shopItem";
-import { client } from "@/lib/mongo";
+import { ShopItem } from "@/features/shop/types/shopItem";
+import { client } from "@/services/database/mongo";
 import { Db } from "mongodb";
-import { User } from "@/types/user"; // assume you saved the User interface here
+import { User } from "@/shared/types/user"; // assume you saved the User interface here
 import { format } from "date-fns";
-import { handleGetSession } from "@/lib/auth/authActions";
+import { handleGetSession } from "@/services/auth/auth/authActions";
 
 /**
  * Appends an array of items to a user's "itemsBought" array.

@@ -1,4 +1,4 @@
-import { client } from "@/lib/mongo";
+import { client } from "@/services/database/mongo";
 
 /**
  * @swagger

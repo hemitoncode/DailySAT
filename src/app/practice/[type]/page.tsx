@@ -1,12 +1,12 @@
 "use client";
 
 import React, { Suspense, useState } from "react";
-import SubjectSidebar from "@/components/features/Practice/SubjectSidebar";
-import QuestionContent from "@/components/features/Practice/QuestionContent";
-import SessionProgress from "@/components/features/Practice/SessionProgress";
-import { englishSubjectsArray, mathSubjectsArray } from "@/data/subject";
-import { Difficulty } from "@/types/practice/difficulty";
-import { EnglishSubjects, Type } from "@/types/practice/subject";
+import SubjectSidebar from "@/features/practice/components/SubjectSidebar";
+import QuestionContent from "@/features/practice/components/QuestionContent";
+import SessionProgress from "@/features/practice/components/SessionProgress";
+import { englishSubjectsArray, mathSubjectsArray } from "@/features/practice/data/subject";
+import { Difficulty } from "@/features/practice/types/difficulty";
+import { EnglishSubjects, Type } from "@/features/practice/types/subject";
 import { useParams } from "next/navigation";
 
 const PracticePage = () => {

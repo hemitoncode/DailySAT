@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/common/Button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useUserStore } from "@/store/user";
+import { Button } from "@/shared/components/Button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -15,8 +15,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { ShopItem } from "@/types/shop/shopItem";
+} from "@/shared/components/ui/drawer";
+import { ShopItem } from "@/features/shop/types/shopItem";
 import { redirect } from "next/navigation";
 
 // Helper function to process purchase and append items to user's inventory

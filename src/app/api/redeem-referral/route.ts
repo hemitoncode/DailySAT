@@ -1,7 +1,7 @@
-import { client } from "@/lib/mongo";
+import { client } from "@/services/database/mongo";
 import { ObjectId } from "mongodb";
-import { BONUS_REFERRED_PERSON, BONUS_REFERRER } from "@/data/constant";
-import { handleGetSession } from "@/lib/auth/authActions";
+import { BONUS_REFERRED_PERSON, BONUS_REFERRER } from "@/shared/data/constant";
+import { handleGetSession } from "@/services/auth/auth/authActions";
 
 /**
  * @swagger

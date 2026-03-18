@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
-import UserCoinDisplay from "@/components/features/Shop/UserCoinDisplay";
-import ShopHeader from "@/components/features/Shop/ShopHeader";
-import ShopGridTabs from "@/components/features/Shop/ShopGridTabs";
-import ItemGrid from "@/components/features/Shop/ItemGrid";
-import CheckoutButton from "@/components/features/Shop/CheckoutButton";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useUserStore } from "@/store/user";
+import UserCoinDisplay from "@/features/shop/components/UserCoinDisplay";
+import ShopHeader from "@/features/shop/components/ShopHeader";
+import ShopGridTabs from "@/features/shop/components/ShopGridTabs";
+import ItemGrid from "@/features/shop/components/ItemGrid";
+import CheckoutButton from "@/features/shop/components/CheckoutButton";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useUserStore } from "@/stores/user";
 import axios from "axios";
-import { User } from "@/types/user";
+import { User } from "@/shared/types/user";
 import { toast } from "react-toastify";
 
 export default function Shop() {

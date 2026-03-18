@@ -1,7 +1,7 @@
-import { englishSubjectsArray, mathSubjectsArray } from "@/data/subject";
-import { client, db } from "@/lib/mongo";
-import { MatchObject } from "@/types/mongo/match-query";
-import { EnglishSubjects, MathSubjects } from "@/types/practice/subject";
+import { englishSubjectsArray, mathSubjectsArray } from "@/features/practice/data/subject";
+import { client, db } from "@/services/database/mongo";
+import { MatchObject } from "@/shared/types/match-query";
+import { EnglishSubjects, MathSubjects } from "@/features/practice/types/subject";
 
 export const GET = async (request: Request) => {
   const { searchParams } = new URL(request.url);

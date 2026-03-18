@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import Footer from "@/components/common/Footer";
-import FAQ from "@/components/features/Landing-Page/FAQ";
-import Features from "@/components/features/Landing-Page/Features";
-import FinalCTA from "@/components/features/Landing-Page/FinalCTA";
-import Hero from "@/components/features/Landing-Page/Hero";
-import Testimonials from "@/components/features/Landing-Page/Testimonials";
-import Workshop from "@/components/features/Landing-Page/Workshop";
-import Background from "@/components/features/Landing-Page/Background";
+import Footer from "@/shared/components/Footer";
+import FAQ from "@/features/landing/components/FAQ";
+import Features from "@/features/landing/components/Features";
+import FinalCTA from "@/features/landing/components/FinalCTA";
+import Hero from "@/features/landing/components/Hero";
+import Testimonials from "@/features/landing/components/Testimonials";
+import Workshop from "@/features/landing/components/Workshop";
+import Background from "@/features/landing/components/Background";
 
 const LandingPage = () => {
   return (

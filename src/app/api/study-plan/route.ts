@@ -1,5 +1,5 @@
-import { handleGetSession } from "@/lib/auth/authActions";
-import { client } from "@/lib/mongo";
+import { handleGetSession } from "@/services/auth/auth/authActions";
+import { client } from "@/services/database/mongo";
 import { Db } from "mongodb";
 
 export const POST = async (request: Request) => {
