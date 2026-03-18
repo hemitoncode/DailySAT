@@ -1,35 +1,35 @@
 // eslint.config.mjs
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import globals from 'globals';
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import globals from "globals";
 
 export default [
   {
-    ignores: ['.next/', 'dist/', 'node_modules/', 'coverage/', 'build/']
+    ignores: [".next/", "dist/", "node_modules/", "coverage/", "build/"],
   },
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
-      sourceType: 'module',
+      sourceType: "module",
       globals: { ...globals.browser, ...globals.node },
-      parser: tsParser,
+      parser: tsparser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
         ecmaFeatures: { jsx: true },
-        ecmaVersion: 'latest'
-      }
+        ecmaVersion: "latest",
+      },
     },
-    plugins: { '@typescript-eslint': tsPlugin },
+    plugins: { "@typescript-eslint": tseslint },
     rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { 
-          args: 'none',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true
-        }
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          args: "none",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
       ],
-      'no-undef': 'off'
-    }
-  }
+      "no-undef": "off",
+    },
+  },
 ];
