@@ -28,6 +28,9 @@ const clientOptions = {
   maxPoolSize: 10,
   connectTimeoutMS: 10000,
   socketTimeoutMS: 45000,
+  // Explicitly set TLS options for MongoDB Atlas
+  tls: true,
+  tlsAllowInvalidCertificates: false,
 };
 
 // Initialize the client and connection promise
