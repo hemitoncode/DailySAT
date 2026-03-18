@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const MONGODB_URI =
-  "mongodb+srv://hemitonworld_db_user:Ipi3zptURAhq4RXm@dailysatcluster.ouqtao6.mongodb.net/?appName=DailySATCluster";
+  "mongodb+srv://hemitonworld_db_user:Ipi3zptURAhq4RXm@dailysatcluster.ouqtao6.mongodb.net/?retryWrites=true&w=majority";
 const DB_NAME = "DailySAT";
 
 const mathDomains = [
@@ -23,7 +23,7 @@ const difficulties = ["Easy", "Medium", "Hard"];
 function generateMathQuestion(domain, difficulty, index) {
   const templates = [
     {
-      question: `In the figure above, what is the value of x if the line passes through points (${10 + (index % 5)}, ${15 + (index % 5)}) and (${20 + (index % 10)}, ${25 + (index % 10)})?`,
+      question: `If a line passes through points (${10 + (index % 5)}, ${15 + (index % 5)}) and (${20 + (index % 10)}, ${25 + (index % 10)}), what is the value of x if y = 0?`,
       choices: {
         A: `${5 + (index % 5)}`,
         B: `${6 + (index % 5)}`,
@@ -32,21 +32,21 @@ function generateMathQuestion(domain, difficulty, index) {
       },
       correct_answer: "A",
       explanation:
-        "Use the slope formula: m = (y₂ - y₁)/(x₂ - x₁). The slope is consistent along the line.",
+        "First find the slope using m = (y₂ - y₁)/(x₂ - x₁). Then use point-slope form to find the x-intercept.",
     },
     {
-      question: `Based on the bar chart showing quarterly sales, what is the total sales for all four quarters?`,
+      question: `A store sold 150 units in Q1, 200 units in Q2, 175 units in Q3, and 225 units in Q4. What is the total sales for all four quarters?`,
       choices: {
-        A: "350 units",
-        B: "400 units",
-        C: "300 units",
-        D: "450 units",
+        A: "750 units",
+        B: "800 units",
+        C: "700 units",
+        D: "850 units",
       },
       correct_answer: "A",
-      explanation: "Add the values represented by each bar in the chart.",
+      explanation: "Add the values: 150 + 200 + 175 + 225 = 750 units.",
     },
     {
-      question: `In the right triangle shown, if angle A is 30° and the hypotenuse is ${10 + (index % 10)}, what is the length of the side opposite to angle A?`,
+      question: `In a right triangle with a 30° angle and a hypotenuse of ${10 + (index % 10)}, what is the length of the side opposite the 30° angle?`,
       choices: {
         A: `${5 + (index % 3)}`,
         B: `${8 + (index % 3)}`,
@@ -58,7 +58,7 @@ function generateMathQuestion(domain, difficulty, index) {
         "In a 30-60-90 triangle, the side opposite 30° is half the hypotenuse.",
     },
     {
-      question: `The scatter plot shows the relationship between hours studied and test scores. What type of correlation does it display?`,
+      question: `A study shows that as hours studied increase, test scores generally increase. What type of correlation does this represent?`,
       choices: {
         A: "Positive correlation",
         B: "Negative correlation",
@@ -67,10 +67,10 @@ function generateMathQuestion(domain, difficulty, index) {
       },
       correct_answer: "A",
       explanation:
-        "As hours studied increase, test scores generally increase, showing positive correlation.",
+        "When both variables increase together, it shows a positive correlation.",
     },
     {
-      question: `In the coordinate plane, what is the area of the triangle with vertices at (0,0), (6,0), and (3,${6 + (index % 4)})?`,
+      question: `What is the area of a triangle with base 6 and height ${6 + (index % 4)}?`,
       choices: {
         A: `${9 + (index % 3)}`,
         B: `${12 + (index % 3)}`,
@@ -81,7 +81,7 @@ function generateMathQuestion(domain, difficulty, index) {
       explanation: "Area = ½ × base × height = ½ × 6 × 6 = 18 square units.",
     },
     {
-      question: `The circle has a radius of ${5 + (index % 5)}. What is the circumference?`,
+      question: `A circle has a radius of ${5 + (index % 5)}. What is the circumference?`,
       choices: {
         A: `${(2 * Math.PI * (5 + (index % 5))) | 0}`,
         B: `${(Math.PI * (5 + (index % 5))) | 0}`,
@@ -92,7 +92,7 @@ function generateMathQuestion(domain, difficulty, index) {
       explanation: "Circumference = 2πr = 2π × r.",
     },
     {
-      question: `Based on the line graph, what was the approximate change from the first data point to the last?`,
+      question: `A quantity increases from 100 to 200. What is the approximate change?`,
       choices: {
         A: "An increase of 100",
         B: "A decrease of 100",
@@ -100,11 +100,10 @@ function generateMathQuestion(domain, difficulty, index) {
         D: "An increase of 50",
       },
       correct_answer: "A",
-      explanation:
-        "Calculate the difference between the starting and ending values on the graph.",
+      explanation: "The change is 200 - 100 = 100, which is an increase.",
     },
     {
-      question: `In the parallel lines diagram, if angle A is ${40 + (index % 20)}°, what is the measure of angle B?`,
+      question: `Two parallel lines are cut by a transversal. If one angle measures ${40 + (index % 20)}°, what is the measure of the corresponding angle?`,
       choices: {
         A: `${40 + (index % 20)}°`,
         B: `${140 - (index % 20)}°`,
@@ -116,7 +115,7 @@ function generateMathQuestion(domain, difficulty, index) {
         "When a transversal crosses parallel lines, corresponding angles are equal.",
     },
     {
-      question: `The pie chart shows the distribution of a budget. If the total budget is $${1000 + (index % 500)}, how much is allocated to category A?`,
+      question: `A budget of $${1000 + (index % 500)} is divided equally among 3 categories. How much is allocated to each category?`,
       choices: {
         A: `$${333 + (index % 100)}`,
         B: `$${250 + (index % 100)}`,
@@ -124,11 +123,10 @@ function generateMathQuestion(domain, difficulty, index) {
         D: `$${500 + (index % 100)}`,
       },
       correct_answer: "A",
-      explanation:
-        "Category A represents ⅓ of the pie chart, so multiply total by ⅓.",
+      explanation: "Divide the total budget by 3: $1000 ÷ 3 ≈ $333.",
     },
     {
-      question: `In the triangle, if the area is ${20 + (index % 10)} square units and the base is ${4 + (index % 4)}, what is the height?`,
+      question: `A triangle has an area of ${20 + (index % 10)} square units and a base of ${4 + (index % 4)}. What is the height?`,
       choices: {
         A: `${10 + (index % 3)}`,
         B: `${8 + (index % 3)}`,
@@ -140,7 +138,7 @@ function generateMathQuestion(domain, difficulty, index) {
         "Area = ½ × base × height. Rearrange to find height = (2 × area)/base.",
     },
     {
-      question: `The cylinder has a radius of ${3 + (index % 4)} and height of ${8 + (index % 6)}. What is the volume?`,
+      question: `A cylinder has a radius of ${3 + (index % 4)} and height of ${8 + (index % 6)}. What is the volume?`,
       choices: {
         A: `${(Math.PI * (3 + (index % 4)) ** 2 * (8 + (index % 6))) | 0}`,
         B: `${(2 * Math.PI * (3 + (index % 4)) * (8 + (index % 6))) | 0}`,
@@ -151,19 +149,18 @@ function generateMathQuestion(domain, difficulty, index) {
       explanation: "Volume of cylinder = πr²h. Plug in the values for r and h.",
     },
     {
-      question: `Based on the histogram showing student test scores, what percentage of students scored between 70-80?`,
+      question: `In a class of 50 students, 20% scored between 70-80 on a test. How many students is this?`,
       choices: {
-        A: `${20 + (index % 15)}%`,
-        B: `${30 + (index % 15)}%`,
-        C: `${15 + (index % 15)}%`,
-        D: `${25 + (index % 15)}%`,
+        A: `${10 + (index % 5)}`,
+        B: `${15 + (index % 5)}`,
+        C: `${5 + (index % 5)}`,
+        D: `${20 + (index % 5)}`,
       },
       correct_answer: "A",
-      explanation:
-        "Calculate the proportion of the total area that falls in the 70-80 range.",
+      explanation: "20% of 50 = 0.20 × 50 = 10 students.",
     },
     {
-      question: `In the coordinate plane, what is the midpoint between points (${2 + (index % 4)}, ${4 + (index % 4)}) and (${10 + (index % 4)}, ${12 + (index % 4)})?`,
+      question: `What is the midpoint between points (${2 + (index % 4)}, ${4 + (index % 4)}) and (${10 + (index % 4)}, ${12 + (index % 4)})?`,
       choices: {
         A: `(${6 + (index % 2)}, ${8 + (index % 2)})`,
         B: `(${8 + (index % 2)}, ${10 + (index % 2)})`,
@@ -174,7 +171,7 @@ function generateMathQuestion(domain, difficulty, index) {
       explanation: "Midpoint formula: ((x₁ + x₂)/2, (y₁ + y₂)/2).",
     },
     {
-      question: `The cone has a height of ${10 + (index % 5)} and a radius of ${4 + (index % 3)}. What is the slant height?`,
+      question: `A cone has a height of ${10 + (index % 5)} and a radius of ${4 + (index % 3)}. What is the slant height?`,
       choices: {
         A: `${Math.sqrt(100 + (index % 5) ** 2 + 16) | 0}`,
         B: `${8 + (index % 3)}`,
@@ -185,7 +182,7 @@ function generateMathQuestion(domain, difficulty, index) {
       explanation: "Slant height = √(r² + h²). Use the Pythagorean theorem.",
     },
     {
-      question: `In the intersecting lines figure, if angle A is ${50 + (index % 30)}°, what is the measure of angle C?`,
+      question: `Two intersecting lines form vertical angles. If one angle measures ${50 + (index % 30)}°, what is the measure of the vertical angle?`,
       choices: {
         A: `${50 + (index % 30)}°`,
         B: `${130 - (index % 30)}°`,
@@ -193,7 +190,7 @@ function generateMathQuestion(domain, difficulty, index) {
         D: `${180 - (index % 30)}°`,
       },
       correct_answer: "A",
-      explanation: "Vertical angles are equal. Angle C is vertical to angle A.",
+      explanation: "Vertical angles are equal.",
     },
   ];
 
