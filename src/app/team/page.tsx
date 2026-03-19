@@ -6,7 +6,7 @@ const About = () => {
   const text = "Our Executives";
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 font-sans pb-20">
+    <div className="min-h-screen w-full bg-white font-sans pb-20">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
 
@@ -61,7 +61,8 @@ const About = () => {
           className="fade-in-up text-sm text-gray-500 font-light mt-1"
           style={{ animationDelay: `${text.length * 40 + 120}ms` }}
         >
-          The people building DailySAT — dedicated to helping every student reach their score.
+          The people building DailySAT — dedicated to helping every student
+          reach their score.
         </p>
       </div>
 
