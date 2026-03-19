@@ -80,543 +80,247 @@ const AI = () => {
     setStep(1);
   };
 
-  const scoreDelta = currentScore && targetScore ? Number(targetScore) - Number(currentScore) : null;
+  const scoreDelta =
+    currentScore && targetScore ? Number(targetScore) - Number(currentScore) : null;
+
+  const inputBase =
+    "w-full px-3.5 py-2.5 border border-gray-200 rounded-xl bg-gray-50 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition";
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap');
+    <div className="min-h-screen w-full bg-slate-50 font-sans">
+      {step === 1 ? (
+        <div className="flex flex-col min-h-screen w-full">
+          {/* Top accent bar */}
+          <div className="h-1 w-full bg-gradient-to-r from-blue-900 via-blue-600 to-blue-400" />
 
-        :root {
-          --blue-deep: #1e3a8a;
-          --blue-mid: #1d4ed8;
-          --blue-bright: #3b82f6;
-          --blue-light: #dbeafe;
-          --blue-pale: #eff6ff;
-          --ink: #0f172a;
-          --muted: #64748b;
-          --border: #e2e8f0;
-          --surface: #f8faff;
-        }
-
-        .page-root {
-          font-family: 'Outfit', sans-serif;
-          min-height: 100vh;
-          width: 100%;
-          background: var(--surface);
-        }
-
-        /* ── STEP 1: FULL-WIDTH FORM ── */
-        .form-page {
-          width: 100%;
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-
-        /* Top accent bar */
-        .form-accent-bar {
-          width: 100%;
-          height: 4px;
-          background: linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-bright) 100%);
-        }
-
-        /* Header section — full width, blue tinted */
-        .form-header {
-          width: 100%;
-          background: white;
-          border-bottom: 1px solid var(--border);
-          padding: 36px 64px 32px;
-          box-sizing: border-box;
-        }
-        .form-header-eyebrow {
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: var(--blue-mid);
-          margin-bottom: 10px;
-        }
-        .form-header-title {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(28px, 3vw, 40px);
-          font-weight: 400;
-          color: var(--ink);
-          letter-spacing: -0.02em;
-          line-height: 1.15;
-          margin-bottom: 8px;
-        }
-        .form-header-title em {
-          font-style: italic;
-          color: var(--blue-mid);
-        }
-        .form-header-sub {
-          font-size: 14px;
-          color: var(--muted);
-          font-weight: 300;
-        }
-
-        /* Form body — full width grid */
-        .form-body {
-          flex: 1;
-          background: var(--surface);
-          padding: 40px 64px 64px;
-          box-sizing: border-box;
-        }
-
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 24px;
-          width: 100%;
-          margin-bottom: 24px;
-        }
-
-        .form-grid-wide {
-          grid-column: span 3;
-        }
-
-        .field-section-label {
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: var(--blue-mid);
-          margin-bottom: 8px;
-          display: block;
-        }
-        .field-label {
-          display: block;
-          font-size: 12px;
-          font-weight: 500;
-          color: #374151;
-          margin-bottom: 6px;
-        }
-
-        .field-card {
-          background: white;
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 20px 22px;
-          animation: field-in 0.4s cubic-bezier(0.22,1,0.36,1) both;
-        }
-        .field-card:nth-child(1) { animation-delay: 0.05s; }
-        .field-card:nth-child(2) { animation-delay: 0.10s; }
-        .field-card:nth-child(3) { animation-delay: 0.15s; }
-        .field-card:nth-child(4) { animation-delay: 0.20s; }
-
-        @keyframes field-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .field-input {
-          width: 100%;
-          padding: 11px 14px;
-          border: 1.5px solid var(--border);
-          border-radius: 10px;
-          background: var(--surface);
-          font-family: 'Outfit', sans-serif;
-          font-size: 14px;
-          font-weight: 400;
-          color: var(--ink);
-          transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
-          box-sizing: border-box;
-        }
-        .field-input::placeholder { color: #cbd5e1; }
-        .field-input:focus {
-          border-color: var(--blue-mid);
-          background: white;
-          box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
-          outline: none;
-        }
-        .field-input-blue {
-          border-color: #bfdbfe;
-          background: var(--blue-pale);
-        }
-        .field-input-blue::placeholder { color: #93c5fd; }
-        .field-input-blue:focus {
-          border-color: var(--blue-mid);
-          background: white;
-          box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
-          outline: none;
-        }
-        .field-textarea {
-          resize: none;
-          min-height: 90px;
-          line-height: 1.6;
-        }
-        .date-wrap { position: relative; }
-        .date-icon {
-          position: absolute;
-          left: 13px; top: 50%;
-          transform: translateY(-50%);
-          color: #94a3b8;
-          pointer-events: none;
-          display: flex;
-        }
-        .field-input-date { padding-left: 40px; }
-
-        .delta-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          background: var(--blue-pale);
-          border: 1px solid var(--blue-light);
-          border-radius: 20px;
-          padding: 3px 10px 3px 7px;
-          font-size: 11px;
-          font-weight: 600;
-          color: var(--blue-mid);
-          margin-top: 10px;
-        }
-
-        .form-actions {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          margin-top: 8px;
-        }
-
-        .submit-btn {
-          flex: 1;
-          background: var(--blue-mid);
-          color: white;
-          font-family: 'Outfit', sans-serif;
-          font-size: 14px;
-          font-weight: 600;
-          padding: 15px 28px;
-          border-radius: 12px;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          position: relative;
-          overflow: hidden;
-          transition: background 0.2s, transform 0.12s, box-shadow 0.2s;
-          letter-spacing: 0.01em;
-        }
-        .submit-btn::after {
-          content: '';
-          position: absolute; inset: 0;
-          background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
-          transform: translateX(-100%);
-          transition: transform 0.55s;
-        }
-        .submit-btn:not(:disabled):hover::after { transform: translateX(100%); }
-        .submit-btn:not(:disabled):hover {
-          background: #1e40af;
-          transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(29,78,216,0.28);
-        }
-        .submit-btn:not(:disabled):active { transform: translateY(0); }
-        .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-
-        .form-footnote {
-          font-size: 11px;
-          color: #94a3b8;
-          font-weight: 300;
-          white-space: nowrap;
-        }
-
-        /* ── STEP 2: RESULTS ── */
-        .results-page {
-          width: 100%;
-          min-height: 100vh;
-          animation: page-in 0.45s cubic-bezier(0.22,1,0.36,1) both;
-        }
-        @keyframes page-in {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .results-accent-bar {
-          width: 100%;
-          height: 4px;
-          background: linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-bright) 100%);
-        }
-        .results-hero {
-          width: 100%;
-          background: linear-gradient(135deg, var(--blue-deep) 0%, #1e40af 100%);
-          padding: 40px 64px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 24px;
-          box-sizing: border-box;
-        }
-        .results-hero-left { display: flex; flex-direction: column; gap: 6px; }
-        .results-hero-eyebrow {
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: #93c5fd;
-        }
-        .results-hero-title {
-          font-size: 28px;
-          font-weight: 700;
-          color: white;
-          letter-spacing: -0.03em;
-        }
-        .results-hero-sub { font-size: 13px; color: #bfdbfe; font-weight: 300; }
-        .results-score-chips { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-        .score-chip {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background: rgba(255,255,255,0.1);
-          border: 1px solid rgba(255,255,255,0.15);
-          border-radius: 12px;
-          padding: 12px 20px;
-        }
-        .score-chip-num {
-          font-size: 24px;
-          font-weight: 700;
-          color: white;
-          letter-spacing: -0.03em;
-          line-height: 1;
-        }
-        .score-chip-label {
-          font-size: 10px;
-          color: #93c5fd;
-          font-weight: 500;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          margin-top: 3px;
-        }
-        .score-arrow { color: #60a5fa; display: flex; align-items: center; }
-        .results-back-bar {
-          background: white;
-          border-bottom: 1px solid var(--border);
-          padding: 12px 64px;
-          display: flex;
-          align-items: center;
-          box-sizing: border-box;
-        }
-        .back-btn {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-family: 'Outfit', sans-serif;
-          font-size: 13px;
-          font-weight: 500;
-          color: #475569;
-          background: white;
-          border: 1.5px solid var(--border);
-          border-radius: 8px;
-          padding: 7px 14px;
-          cursor: pointer;
-          transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
-        }
-        .back-btn:hover {
-          background: var(--blue-pale);
-          border-color: #93c5fd;
-          color: var(--blue-mid);
-          box-shadow: 0 2px 8px rgba(29,78,216,0.08);
-        }
-        .results-body {
-          padding: 40px 64px 64px;
-          background: var(--surface);
-          box-sizing: border-box;
-        }
-        .results-inner {
-          background: white;
-          border: 1px solid var(--border);
-          border-radius: 16px;
-          padding: 40px;
-          width: 100%;
-          box-sizing: border-box;
-        }
-      `}</style>
-
-      <div className="page-root">
-        {step === 1 ? (
-          <div className="form-page">
-            <div className="form-accent-bar" />
-
-            {/* Header */}
-            <div className="form-header">
-              <p className="form-header-eyebrow">SAT Prep · AI Powered</p>
-              <h1 className="form-header-title">
-                Build your <em>study plan.</em>
-              </h1>
-              <p className="form-header-sub">
-                Enter your scores and test date — we'll generate a personalized day-by-day SAT roadmap in seconds.
-              </p>
-            </div>
-
-            {/* Form body */}
-            <div className="form-body">
-              <form onSubmit={handleSubmit}>
-                <div className="form-grid">
-                  {/* Current Score */}
-                  <div className="field-card">
-                    <span className="field-section-label">Current Score</span>
-                    <label htmlFor="current-score" className="field-label">Your latest SAT score</label>
-                    <input
-                      id="current-score"
-                      type="number"
-                      value={currentScore}
-                      onChange={(e) => setCurrentScore(e.target.value)}
-                      min={400}
-                      max={1600}
-                      required
-                      placeholder="e.g. 1050"
-                      className="field-input"
-                    />
-                  </div>
-
-                  {/* Target Score */}
-                  <div className="field-card">
-                    <span className="field-section-label">Target Score</span>
-                    <label htmlFor="target-score" className="field-label">Where you want to be</label>
-                    <input
-                      id="target-score"
-                      type="number"
-                      value={targetScore}
-                      onChange={(e) => setTargetScore(e.target.value)}
-                      min={400}
-                      max={1600}
-                      required
-                      placeholder="e.g. 1400"
-                      className="field-input field-input-blue"
-                    />
-                    {scoreDelta !== null && scoreDelta > 0 && (
-                      <div className="delta-pill">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                        +{scoreDelta} point goal
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Test Date */}
-                  <div className="field-card">
-                    <span className="field-section-label">Test Date</span>
-                    <label htmlFor="test-date" className="field-label">When is your SAT?</label>
-                    <div className="date-wrap">
-                      <span className="date-icon">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </span>
-                      <input
-                        id="test-date"
-                        type="date"
-                        value={testDate}
-                        onChange={(e) => setTestDate(e.target.value)}
-                        required
-                        min={new Date(Date.now()).toISOString().split("T")[0]}
-                        max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
-                        className="field-input field-input-date"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Personalization — full width */}
-                  <div className="field-card form-grid-wide">
-                    <span className="field-section-label">About You</span>
-                    <label htmlFor="personalization" className="field-label">Strengths, weaknesses & study preferences</label>
-                    <textarea
-                      id="personalization"
-                      value={personalization}
-                      onChange={(e) => setPersonalization(e.target.value)}
-                      placeholder="e.g. I struggle with reading comprehension but I'm strong in algebra. I study best in the morning for 1–2 hours…"
-                      required
-                      className="field-input field-textarea"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-actions">
-                  <button type="submit" disabled={isLoading} className="submit-btn">
-                    {isLoading ? (
-                      <>
-                        <svg className="animate-spin h-4 w-4" style={{ color: "white" }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        Generating your plan…
-                      </>
-                    ) : (
-                      <>
-                        Generate Study Plan
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </>
-                    )}
-                  </button>
-                  <p className="form-footnote">Powered by Claude AI · Plans generated in seconds</p>
-                </div>
-              </form>
-            </div>
+          {/* Header */}
+          <div className="w-full bg-white border-b border-gray-200 px-16 py-9">
+            <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-600 mb-2">
+              SAT Prep · AI Powered
+            </p>
+            <h1 className="text-4xl font-normal text-gray-900 tracking-tight leading-tight mb-2">
+              Build your{" "}
+              <em className="italic not-italic font-normal text-blue-600">study plan.</em>
+            </h1>
+            <p className="text-sm text-gray-500 font-light">
+              Enter your scores and test date — we'll generate a personalized day-by-day SAT roadmap in seconds.
+            </p>
           </div>
 
-        ) : (
-          <div className="results-page">
-            <div className="results-accent-bar" />
+          {/* Form body */}
+          <div className="flex-1 w-full bg-slate-50 px-16 py-10">
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-3 gap-5 w-full mb-5">
 
-            {/* Hero */}
-            <div className="results-hero">
-              <div className="results-hero-left">
-                <p className="results-hero-eyebrow">Your personalized plan</p>
-                <h2 className="results-hero-title">SAT Study Plan</h2>
-                {testDate && (
-                  <p className="results-hero-sub">
-                    Test date: {new Date(testDate).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+                {/* Current Score */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-5">
+                  <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-600 mb-2">
+                    Current Score
                   </p>
-                )}
-              </div>
+                  <label
+                    htmlFor="current-score"
+                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                  >
+                    Your latest SAT score
+                  </label>
+                  <input
+                    id="current-score"
+                    type="number"
+                    value={currentScore}
+                    onChange={(e) => setCurrentScore(e.target.value)}
+                    min={400}
+                    max={1600}
+                    required
+                    placeholder="e.g. 1050"
+                    className={inputBase}
+                  />
+                </div>
 
-              {currentScore && targetScore && (
-                <div className="results-score-chips">
-                  <div className="score-chip">
-                    <span className="score-chip-num">{currentScore}</span>
-                    <span className="score-chip-label">Current</span>
-                  </div>
-                  <div className="score-arrow">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </div>
-                  <div className="score-chip" style={{ borderColor: "rgba(147,197,253,0.4)", background: "rgba(147,197,253,0.15)" }}>
-                    <span className="score-chip-num">{targetScore}</span>
-                    <span className="score-chip-label">Target</span>
+                {/* Target Score */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-5">
+                  <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-600 mb-2">
+                    Target Score
+                  </p>
+                  <label
+                    htmlFor="target-score"
+                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                  >
+                    Where you want to be
+                  </label>
+                  <input
+                    id="target-score"
+                    type="number"
+                    value={targetScore}
+                    onChange={(e) => setTargetScore(e.target.value)}
+                    min={400}
+                    max={1600}
+                    required
+                    placeholder="e.g. 1400"
+                    className="w-full px-3.5 py-2.5 border border-blue-200 rounded-xl bg-blue-50 text-sm text-blue-900 placeholder-blue-200 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/10 transition"
+                  />
+                  {scoreDelta !== null && scoreDelta > 0 && (
+                    <div className="mt-2.5 inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-1 text-[11px] font-semibold text-blue-600">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                      +{scoreDelta} point goal
+                    </div>
+                  )}
+                </div>
+
+                {/* Test Date */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-5">
+                  <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-600 mb-2">
+                    Test Date
+                  </p>
+                  <label
+                    htmlFor="test-date"
+                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                  >
+                    When is your SAT?
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    <input
+                      id="test-date"
+                      type="date"
+                      value={testDate}
+                      onChange={(e) => setTestDate(e.target.value)}
+                      required
+                      min={new Date(Date.now()).toISOString().split("T")[0]}
+                      max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
+                      className={`${inputBase} pl-10`}
+                    />
                   </div>
                 </div>
+
+                {/* About You — full width */}
+                <div className="col-span-3 bg-white border border-gray-200 rounded-2xl p-5">
+                  <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-600 mb-2">
+                    About You
+                  </p>
+                  <label
+                    htmlFor="personalization"
+                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                  >
+                    Strengths, weaknesses &amp; study preferences
+                  </label>
+                  <textarea
+                    id="personalization"
+                    value={personalization}
+                    onChange={(e) => setPersonalization(e.target.value)}
+                    placeholder="e.g. I struggle with reading comprehension but I'm strong in algebra. I study best in the morning for 1–2 hours…"
+                    required
+                    className={`${inputBase} min-h-[88px] resize-none leading-relaxed`}
+                  />
+                </div>
+              </div>
+
+              {/* Submit row */}
+              <div className="flex items-center gap-5">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-semibold px-6 py-3.5 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-lg hover:shadow-blue-600/25 hover:-translate-y-px"
+                >
+                  {isLoading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Generating your plan…
+                    </>
+                  ) : (
+                    <>
+                      Generate Study Plan
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+                <p className="text-[11px] text-gray-400 font-light whitespace-nowrap">
+                  Powered by Claude AI · Plans generated in seconds
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col min-h-screen w-full">
+          {/* Top accent bar */}
+          <div className="h-1 w-full bg-gradient-to-r from-blue-900 via-blue-600 to-blue-400" />
+
+          {/* Hero */}
+          <div className="w-full bg-gradient-to-br from-blue-900 to-blue-700 px-16 py-10 flex items-center justify-between gap-6">
+            <div className="flex flex-col gap-1.5">
+              <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-300">
+                Your personalized plan
+              </p>
+              <h2 className="text-3xl font-bold text-white tracking-tight">SAT Study Plan</h2>
+              {testDate && (
+                <p className="text-sm text-blue-200 font-light">
+                  Test date:{" "}
+                  {new Date(testDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
               )}
             </div>
 
-            {/* Back bar */}
-            <div className="results-back-bar">
-              <button onClick={resetForm} className="back-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            {currentScore && targetScore && (
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-col items-center bg-white/10 border border-white/15 rounded-xl px-5 py-3">
+                  <span className="text-2xl font-bold text-white tracking-tight leading-none">{currentScore}</span>
+                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">Current</span>
+                </div>
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-                Back to Form
-              </button>
-            </div>
-
-            {/* Plan body */}
-            <div className="results-body">
-              <div className="results-inner">
-                <StudyPlan
-                  plan={studyPlan as StudyPlanData}
-                  currentScore={currentScore}
-                  targetScore={targetScore}
-                  testDate={testDate ? new Date(testDate) : undefined}
-                />
+                <div className="flex flex-col items-center bg-blue-300/15 border border-blue-300/40 rounded-xl px-5 py-3">
+                  <span className="text-2xl font-bold text-white tracking-tight leading-none">{targetScore}</span>
+                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">Target</span>
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Back bar */}
+          <div className="w-full bg-white border-b border-gray-200 px-16 py-3 flex items-center">
+            <button
+              onClick={resetForm}
+              className="flex items-center gap-2 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg px-3.5 py-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Form
+            </button>
+          </div>
+
+          {/* Plan body */}
+          <div className="flex-1 w-full bg-slate-50 px-16 py-10">
+            <div className="w-full bg-white border border-gray-200 rounded-2xl p-10">
+              <StudyPlan
+                plan={studyPlan as StudyPlanData}
+                currentScore={currentScore}
+                targetScore={targetScore}
+                testDate={testDate ? new Date(testDate) : undefined}
+              />
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 
