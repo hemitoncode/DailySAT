@@ -34,6 +34,9 @@ export interface QuestionData {
     };
     difficulty: string;
     subject: string;
+    data?: {
+      coinReward?: number;
+    };
   };
 }
 

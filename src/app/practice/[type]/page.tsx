@@ -1,10 +1,13 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import SubjectSidebar from "@/features/practice/components/SubjectSidebar";
 import QuestionContent from "@/features/practice/components/QuestionContent";
 import SessionProgress from "@/features/practice/components/SessionProgress";
-import { englishSubjectsArray, mathSubjectsArray } from "@/features/practice/data/subject";
+import {
+  englishSubjectsArray,
+  mathSubjectsArray,
+} from "@/features/practice/data/subject";
 import { Difficulty } from "@/features/practice/types/difficulty";
 import { EnglishSubjects, Type } from "@/features/practice/types/subject";
 import { useParams } from "next/navigation";

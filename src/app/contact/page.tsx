@@ -25,7 +25,7 @@ const Contact = () => {
     text: string;
   } | null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
-    {}
+    {},
   );
   const [emailCopyStatus, setEmailCopyStatus] = useState<{
     success: boolean;
@@ -153,7 +153,7 @@ const Contact = () => {
             "Sorry, there was an error sending your message. Please try again.",
         });
       }
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Sorry, there was an error sending your message. Please try again or contact us directly using the email options below.",

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
-import { User } from "@/shared/types/user";
 
 export default function UserCoinDisplay() {
   const user = useUserStore((state) => state.user);
@@ -16,7 +15,7 @@ export default function UserCoinDisplay() {
         const res = await axios.get("/api/auth/get-user");
         const userDoc = await res.data.user;
         setCoins(userDoc.currency ?? -1);
-      } catch (err) {
+      } catch {
         setCoins(-1);
       }
     };

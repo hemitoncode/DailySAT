@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useReducer } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import content from "@/features/lessons/data/lessoncontent";
 import FinalQuiz from "@/features/lessons/components/FinalQuiz";
 import axios from "axios";
@@ -28,7 +28,7 @@ export default function LessonsPage() {
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const [flipState, setFlipState] = useState<"none" | "flipping" | "flipped">(
-    "none"
+    "none",
   );
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [panesVisible, setPanesVisible] = useState(false);
@@ -83,8 +83,8 @@ export default function LessonsPage() {
 
   const allSubtopics = Object.entries(lessons).flatMap(([_, topics]) =>
     Object.entries(topics).flatMap(([topic, subtopics]) =>
-      subtopics.map((sub) => ({ subtopic: sub, topic }))
-    )
+      subtopics.map((sub) => ({ subtopic: sub, topic })),
+    ),
   );
   const MARKDOWN_PROPS = {
     remarkPlugins: [remarkMath],
@@ -132,7 +132,7 @@ export default function LessonsPage() {
   useEffect(() => {
     localStorage.setItem(
       "completedSubtopics",
-      JSON.stringify(completedSubtopics)
+      JSON.stringify(completedSubtopics),
     );
   }, [completedSubtopics]);
 
@@ -160,7 +160,7 @@ export default function LessonsPage() {
   };
 
   const handleOpenFinalQuiz = (
-    quizType: "FinalMathQuiz" | "FinalReadingWritingQuiz"
+    quizType: "FinalMathQuiz" | "FinalReadingWritingQuiz",
   ) => {
     setFlipState("flipping");
     setTimeout(() => {
@@ -181,7 +181,7 @@ export default function LessonsPage() {
   const handleNextSubtopic = () => {
     const nextSubtopics = allSubtopics.filter((s) => s.topic === currentTopic);
     const currentInTopicIndex = nextSubtopics.findIndex(
-      (s) => s.subtopic === selectedTopic
+      (s) => s.subtopic === selectedTopic,
     );
 
     if (!completedSubtopics.includes(selectedTopic!)) {
@@ -212,14 +212,14 @@ export default function LessonsPage() {
   };
 
   const overallProgress = Math.round(
-    (completedSubtopics.length / allSubtopics.length) * 100
+    (completedSubtopics.length / allSubtopics.length) * 100,
   );
 
   const topicProgress = Math.round(
     (topicSubtopics.filter((s) => completedSubtopics.includes(s.subtopic))
       .length /
       topicSubtopics.length) *
-      100
+      100,
   );
 
   const isFinalQuiz =
@@ -604,8 +604,6 @@ export default function LessonsPage() {
                             {content[selectedTopic]?.practice.map((q, idx) => {
                               const isAnswered = selectedAnswers[idx];
                               const selectedOption = selectedAnswers[idx];
-                              const isCorrect =
-                                selectedOption === q.correctAnswer;
 
                               return (
                                 <div
@@ -665,7 +663,7 @@ export default function LessonsPage() {
                                           if (
                                             (
                                               document.getElementById(
-                                                `deepseek-explanation-${idx}`
+                                                `deepseek-explanation-${idx}`,
                                               ) as HTMLButtonElement
                                             ).innerText === "Hide Explanation"
                                           ) {
@@ -691,7 +689,7 @@ export default function LessonsPage() {
                                               {
                                                 prompt:
                                                   sanitizeForPrompt(
-                                                    q.question
+                                                    q.question,
                                                   ) +
                                                   `. Here are the answer choices: ${q.options}. The correct answer is ${q.correctAnswer}. Indicate the correct answer in bold and explain why it's right.`,
                                               },
@@ -700,7 +698,7 @@ export default function LessonsPage() {
                                                   abortControllerRef.current
                                                     .signal,
                                                 timeout: 30000, // 30s timeout
-                                              }
+                                              },
                                             );
 
                                             setAnswers((prev) => {
@@ -724,7 +722,7 @@ export default function LessonsPage() {
                                               return updated;
                                             });
                                             toast.error(
-                                              "Sorry, there was a slight hiccup. Please try again later."
+                                              "Sorry, there was a slight hiccup. Please try again later.",
                                             );
                                           }
                                         }}
@@ -748,7 +746,7 @@ export default function LessonsPage() {
                               className="self-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                             >
                               {topicSubtopics.findIndex(
-                                (s) => s.subtopic === selectedTopic
+                                (s) => s.subtopic === selectedTopic,
                               ) +
                                 1 <
                               topicSubtopics.length

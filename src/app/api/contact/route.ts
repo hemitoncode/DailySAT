@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     if (!first_name || !last_name || !email || !inquiry_type || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: "Invalid email format" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
           email,
           phone,
           inquiry_type,
-          message
+          message,
         ),
       });
     } catch (error) {
@@ -43,12 +43,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Message sent successfully" },
-      { status: 200 }
+      { status: 200 },
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to send message. Please try again later." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

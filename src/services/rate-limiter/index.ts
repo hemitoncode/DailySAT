@@ -8,7 +8,6 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.tokenBucket(5, "5 m", 5),
 });
 
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 export const handleRatelimitSuccess = async (session: any | null) => {
   const email = session?.user?.email;
 

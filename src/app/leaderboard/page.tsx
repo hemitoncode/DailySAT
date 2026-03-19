@@ -28,7 +28,7 @@ interface LeaderboardEntry {
 const HomePage: React.FC = () => {
   const [selectedLeague, setSelectedLeague] = useState<string>("Bronze");
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
-    []
+    [],
   );
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
       }
       const data = await response.json();
       setLeaderboardData(data.data);
-    } catch (error) {
+    } catch {
       setError("Failed to load leaderboard data. Please try again.");
     } finally {
       setLoading(false);

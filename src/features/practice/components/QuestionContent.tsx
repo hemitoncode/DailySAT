@@ -42,7 +42,7 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(
-    null
+    null,
   );
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -65,10 +65,10 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
       const response = await handleFetchQuestion(
         type,
         difficulty as Difficulty,
-        subject as EnglishSubjects
+        subject as EnglishSubjects,
       );
       setCurrentQuestion(response.data);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch question. Please try again.");
     } finally {
       setIsLoading(false);
@@ -91,7 +91,8 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
     const isCorrect =
       selectedAnswer === currentQuestion.questionMeta.question.correct_answer;
 
-    handleSubmitQuestion(isCorrect)
+    const coinReward = currentQuestion?.questionMeta?.data?.coinReward;
+    handleSubmitQuestion(isCorrect, coinReward)
       .then(() => {
         toast.success("Question submitted!");
       })
@@ -264,7 +265,7 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
                   )}
                 </button>
               );
-            }
+            },
           )) ||
           null}
       </div>

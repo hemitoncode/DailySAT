@@ -28,22 +28,22 @@ const Home = () => {
 
   const getIcon = (userData?: User) => {
     const icons = userData?.itemsBought?.filter((item) =>
-      item.name.includes("Icon")
+      item.name.includes("Icon"),
     );
     if (!icons?.length) return;
     const mostExpensiveIcon = icons.reduce((max, item) =>
-      item.price > max.price ? item : max
+      item.price > max.price ? item : max,
     );
     setIcon(mostExpensiveIcon.name.split(" ").join("-").toLowerCase());
   };
 
   const getBanner = (userData?: User) => {
     const banners = userData?.itemsBought?.filter((item) =>
-      item.name.includes("Banner")
+      item.name.includes("Banner"),
     );
     if (!banners?.length) return;
     const mostExpensiveBanner = banners.reduce((max, item) =>
-      item.price > max.price ? item : max
+      item.price > max.price ? item : max,
     );
 
     const bannerMap: { [key: string]: DisplayBanner } = {
@@ -86,7 +86,7 @@ const Home = () => {
         getIcon(userData);
         getBanner(userData);
         setUser?.(userData ?? null);
-      } catch (error) {
+      } catch {
         toast.error("Sorry, we could not get your user data");
       }
     };

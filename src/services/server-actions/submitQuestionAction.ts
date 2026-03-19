@@ -6,7 +6,10 @@ import { handleGetSession } from "@/services/auth/auth/authActions";
 import { Investor } from "@/features/shop/types/investor";
 import { determineLeague } from "@/services/leaderboard/leaderboard/determineLeague";
 import { updateLeaderboard } from "@/services/leaderboard/leaderboard/updateLeaderboard";
-export const handleSubmitQuestion = async (isCorrect: boolean) => {
+export const handleSubmitQuestion = async (
+  isCorrect: boolean,
+  coinReward?: number,
+) => {
   try {
     const session = await handleGetSession();
     const email = session?.user?.email;
@@ -31,13 +34,15 @@ export const handleSubmitQuestion = async (isCorrect: boolean) => {
         return total + amnt * reward;
       }, 0) ?? 0;
 
+    const rewardAmount = isCorrect
+      ? (coinReward ?? QUESTION_IS_CORRECT_POINTS) + investorRewardBonus
+      : 0;
+
     await usersColl.updateOne(
       { email },
       {
         $inc: {
-          currency: isCorrect
-            ? QUESTION_IS_CORRECT_POINTS + investorRewardBonus
-            : 0,
+          currency: rewardAmount,
           correctAnswered: isCorrect ? 1 : 0,
           wrongAnswered: !isCorrect ? 1 : 0,
         },
