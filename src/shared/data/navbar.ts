@@ -8,5 +8,4 @@ export const menuItems: NavItem[] = [
   { label: "Team", href: "/team" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Contact", href: "/contact" },
-  { label: "Lessons", href: "/lessons" },
 ];
