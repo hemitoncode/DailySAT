@@ -16,17 +16,14 @@ const StatDisplay: React.FC<CoinDisplayProps> = ({
   icon,
   color,
 }) => {
-
   return (
-    <div className="shadow-lg rounded-lg w-full bg-white p-4">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 w-full">
       <Header title={header} icon={icon} />
-      <div className="flex items-center mb-5">
-        <div>
-          <p className="text-6xl font-bold">
-            <span style={{ color: color }}>{number || 0}</span>{" "}
-            <span className="text-xl text-gray-400">{type}</span>
-          </p>
-        </div>
+      <div className="flex items-end gap-2">
+        <p className="text-5xl font-bold leading-none tracking-tight" style={{ color }}>
+          {number ?? 0}
+        </p>
+        <p className="text-sm text-gray-400 font-light mb-1">{type}</p>
       </div>
     </div>
   );
