@@ -1,40 +1,45 @@
 import React from "react";
-import { Button } from "@/shared/components/Button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useUserStore } from "@/stores/user";
-import { useGridStore } from "@/stores/shop"; // <-- import the grid store
+import { useGridStore } from "@/stores/shop";
 import { GridType } from "@/features/shop/types/grid";
 
+const tabs: { key: GridType; label: string }[] = [
+  { key: "investor", label: "Investor" },
+  { key: "animal", label: "Animal Icon" },
+  { key: "banners", label: "Banners" },
+];
+
 export default function ShopGridTabs() {
-    const user = useUserStore((state) => state.user);
-    const grid = useGridStore((state) => state.grid);
-    const setGrid = useGridStore((state) => state.setGrid);
+  const user = useUserStore((state) => state.user);
+  const grid = useGridStore((state) => state.grid);
+  const setGrid = useGridStore((state) => state.setGrid);
 
-    const tabs = ["investor", "animal", "banners"];
-
-    if (!user) {
-        return (
-            <div className="md:w-[600px] w-[350px] mx-auto h-[80px] flex items-center justify-between mt-4">
-                {tabs.map((_, i) => (
-                    <Skeleton key={i} className="h-[40px] w-1/3 bg-[#4D68C3] rounded-full" />
-                ))}
-            </div>
-        );
-    }
-
+  if (!user) {
     return (
-        <div className="md:w-[600px] w-[350px] mx-auto h-[80px] flex items-center justify-between mt-4">
-            {tabs.map((tab) => (
-                <Button
-                    key={tab}
-                    onClick={() => setGrid(tab as GridType)}
-                    className={`${
-                        grid !== tab ? "bg-[#4D68C3] text-white" : ""
-                    } rounded-full px-4 py-2 w-1/3`}
-                >
-                    {tab === "animal" ? "Animal Icon" : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </Button>
-            ))}
-        </div>
+      <div className="flex items-center gap-3">
+        {tabs.map((_, i) => (
+          <Skeleton key={i} className="h-10 flex-1 rounded-xl bg-gray-200" />
+        ))}
+      </div>
     );
+  }
+
+  return (
+    <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl p-1.5">
+      {tabs.map((tab) => (
+        <button
+          key={tab.key}
+          onClick={() => setGrid(tab.key)}
+          className={`flex-1 text-sm font-semibold px-4 py-2.5 rounded-xl transition ${
+            grid === tab.key
+              ? "bg-blue-500 text-white shadow-sm shadow-blue-500/30"
+              : "text-gray-500 hover:text-blue-500 hover:bg-blue-50"
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
 }
