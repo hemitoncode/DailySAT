@@ -5,12 +5,9 @@ import Header from "./Header";
 const RedeemReferral = () => {
   const redeemReferralBonus = async () => {
     const referralCode = prompt("Enter a referral code:");
-
     if (referralCode) {
       try {
-        await axios.post("/api/redeem-referral", {
-          referralCode,
-        });
+        await axios.post("/api/redeem-referral", { referralCode });
       } catch {
         alert("An error occurred while redeeming the reward.");
       }
@@ -18,19 +15,22 @@ const RedeemReferral = () => {
   };
 
   return (
-    <div className="shadow-lg w-full rounded-lg bg-white p-4">
+    <div className="w-full">
       <Header title="DailySAT Referral" icon="gift" />
-      <p className="text-lg font-semibold text-gray-600 mb-6">
-        Redeem 250 coins by using a referral code.
+      <p className="text-sm text-gray-500 font-light leading-relaxed mb-6">
+        Redeem{" "}
+        <span className="font-semibold text-blue-500">250 coins</span>{" "}
+        by using a friend's referral code.
       </p>
-      <div className="flex justify-center mt-10 items-center">
-        <button
-          className="bg-blue-600 px-6 py-3 text-white rounded-md font-semibold shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200 border-none"
-          onClick={redeemReferralBonus}
-        >
-          Redeem reward
-        </button>
-      </div>
+      <button
+        onClick={redeemReferralBonus}
+        className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white text-sm font-semibold px-5 py-3 rounded-xl transition hover:shadow-lg hover:shadow-blue-500/25 hover:-translate-y-px"
+      >
+        Redeem Reward
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </button>
     </div>
   );
 };
