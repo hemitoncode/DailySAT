@@ -2,7 +2,6 @@ export const resourceLinks = [
   { href: "/shop", label: "Shop" },
   { href: "/team", label: "Our Team" },
   { href: "/contact", label: "Contact" },
-  { href: "/leaderboard", label: "Leaderboard" },
 ];
 
 export const dashboardLinks = [

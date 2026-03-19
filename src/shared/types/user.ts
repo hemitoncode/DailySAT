@@ -23,6 +23,6 @@ export interface User {
   itemsBought: ShopItem[];
   investors?: Investor[];
 
-  // Points for leaderboard
+  // Performance points
   points: number;
 }

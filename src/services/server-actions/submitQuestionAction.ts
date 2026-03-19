@@ -4,8 +4,6 @@ import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
 import { db } from "@/services/database/mongo";
 import { handleGetSession } from "@/services/auth/auth/authActions";
 import { Investor } from "@/features/shop/types/investor";
-import { determineLeague } from "@/services/leaderboard/leaderboard/determineLeague";
-import { updateLeaderboard } from "@/services/leaderboard/leaderboard/updateLeaderboard";
 import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 import { User } from "@/shared/types/user";
 
@@ -67,24 +65,6 @@ export const handleSubmitQuestion = async (
 
     if (!updatedUser) {
       updatedUser = await usersColl.findOne({ email });
-    }
-
-    const correctAnswered = updatedUser?.correctAnswered ?? 0;
-    const wrongAnswered = updatedUser?.wrongAnswered ?? 0;
-    const userScore =
-      typeof updatedUser?.points === "number"
-        ? updatedUser.points
-        : correctAnswered - wrongAnswered;
-    const league = determineLeague(userScore);
-    if (updatedUser && league !== "None") {
-      const userData = {
-        score: userScore,
-        username: updatedUser.name || "Anonymous User",
-        league: league,
-      };
-
-      // Update leaderboard
-      await updateLeaderboard(db, league, userData);
     }
 
     return {
