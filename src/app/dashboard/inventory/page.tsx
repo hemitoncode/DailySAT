@@ -135,8 +135,6 @@ const InventoryPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 font-sans pb-16">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');`}</style>
-
       <PageHeader>
         <PageHeader.Eyebrow>DailySAT · Inventory</PageHeader.Eyebrow>
         <PageHeader.Title>
@@ -184,10 +182,7 @@ const InventoryPage = () => {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
                     Spotlight item
                   </p>
-                  <h2
-                    className="mt-2 text-3xl text-slate-900"
-                    style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-                  >
+                  <h2 className="mt-2 text-3xl text-slate-900">
                     {heroItem.name}
                   </h2>
                   <p className="mt-2 text-sm text-slate-600">
@@ -384,12 +379,7 @@ const InventoryCard = ({ item, index }: { item: ShopItem; index: number }) => {
           #{index + 1}
         </span>
       </div>
-      <h3
-        className="mt-4 text-2xl text-slate-900"
-        style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-      >
-        {item.name}
-      </h3>
+      <h3 className="mt-4 text-2xl text-slate-900">{item.name}</h3>
       <p className="mt-2 text-sm text-slate-600">{item.purpose}</p>
       <div className="mt-5 grid gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
         <span className="rounded-full border border-gray-200 px-3 py-1">
@@ -418,12 +408,7 @@ const StatCard = ({
     <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
       {label}
     </p>
-    <p
-      className="mt-2 text-3xl text-slate-900"
-      style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-    >
-      {value}
-    </p>
+    <p className="mt-2 text-3xl text-slate-900">{value}</p>
     <p className="text-sm text-slate-500">{detail}</p>
   </div>
 );
@@ -448,12 +433,7 @@ const EmptyState = () => (
     <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
       No items yet
     </p>
-    <p
-      className="mt-3 text-3xl text-slate-900"
-      style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-    >
-      Start filling your vault
-    </p>
+    <p className="mt-3 text-3xl text-slate-900">Start filling your vault</p>
     <p className="mt-2 text-sm text-slate-500">
       Purchases from the shop will appear here instantly. Icons or banners… grab
       your first one to unlock this ledger.
