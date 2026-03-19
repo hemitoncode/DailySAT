@@ -249,9 +249,6 @@ const AI = () => {
                     </>
                   )}
                 </button>
-                <p className="text-[11px] text-gray-400 font-light whitespace-nowrap">
-                  Powered by Claude AI · Plans generated in seconds
-                </p>
               </div>
             </form>
           </div>
