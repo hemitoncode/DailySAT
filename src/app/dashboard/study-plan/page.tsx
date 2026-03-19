@@ -19,14 +19,12 @@ const StudyPlan = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 px-4 py-10">
-      <div className="mx-auto w-full max-w-5xl">
-        {plan !== null ? (
-          <Calendar plan={plan} className="min-h-[calc(100vh-4rem)]" />
-        ) : (
-          <Skeleton className="w-full min-h-[calc(100vh-4rem)] mb-2 bg-gray-400/60 " />
-        )}
-      </div>
+    <div className="min-h-screen w-full bg-slate-50">
+      {plan !== null ? (
+        <Calendar plan={plan} className="min-h-screen" />
+      ) : (
+        <Skeleton className="w-full min-h-screen bg-gray-400/60" />
+      )}
     </div>
   );
 };
