@@ -8,7 +8,6 @@ export default function UserCoinDisplay() {
   const [coins, setCoins] = useState(-1);
 
   useEffect(() => {
-    // Fetch the user doc from the backend using the user's email
     const fetchUserDoc = async () => {
       if (!user?.email) return;
       try {
@@ -19,28 +18,27 @@ export default function UserCoinDisplay() {
         setCoins(-1);
       }
     };
-
     fetchUserDoc();
 
-    // Event handler function for coin updates
     const handleUserUpdate = (e: Event) => {
       const price = (e as CustomEvent<{ price: number }>).detail.price;
       setCoins((prev) => prev + price);
     };
-
     window.addEventListener("user-updated", handleUserUpdate);
-
-    return () => {
-      window.removeEventListener("user-updated", handleUserUpdate);
-    };
+    return () => window.removeEventListener("user-updated", handleUserUpdate);
   }, []);
 
   return (
-    <div className="fixed bg-blue-700 rounded-3xl bottom-2 right-2 z-50">
+    <div className="fixed bottom-4 right-4 z-50">
       {coins !== -1 ? (
-        <div className="text-white bg-transparent px-2 py-2">{coins} coins</div>
+        <div className="flex items-center gap-2 bg-blue-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/30">
+          <svg className="w-4 h-4 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+          </svg>
+          {coins} coins
+        </div>
       ) : (
-        <Skeleton className="h-[40px] bg-transparent w-[80px] z-10" />
+        <Skeleton className="h-10 w-24 rounded-xl bg-blue-200" />
       )}
     </div>
   );
