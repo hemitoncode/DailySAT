@@ -6,29 +6,39 @@ import { handleGetSession } from "@/services/auth/auth/authActions";
 import { Investor } from "@/features/shop/types/investor";
 import { determineLeague } from "@/services/leaderboard/leaderboard/determineLeague";
 import { updateLeaderboard } from "@/services/leaderboard/leaderboard/updateLeaderboard";
+import { ensureUserDocument } from "@/services/user/ensureUserDocument";
+import { User } from "@/shared/types/user";
+
+type SubmitQuestionResponse = {
+  status: number;
+  result?: string;
+  error?: string;
+  isCorrect?: boolean;
+  user?: Partial<User>;
+};
+
 export const handleSubmitQuestion = async (
   isCorrect: boolean,
   coinReward?: number,
-) => {
+): Promise<SubmitQuestionResponse> => {
   try {
     const session = await handleGetSession();
-    const email = session?.user?.email;
+    const baseUser = await ensureUserDocument(session?.user);
 
-    if (!email) {
+    if (!baseUser?.email) {
       throw new Error("User email not found in session.");
     }
 
-    const usersColl = db.collection("users");
+    const email = baseUser.email;
+
+    const usersColl = db.collection<User>("users");
     let investorRewardBonus = 0;
 
-    const investorItem = await usersColl.findOne<{ investors: Investor[] }>(
-      { email },
-      { projection: { investors: 1 } },
-    );
+    const investorItem = baseUser?.investors;
 
     // Calculate earnings for each investor item
     investorRewardBonus =
-      investorItem?.investors.reduce((total: number, investor: Investor) => {
+      investorItem?.reduce((total: number, investor: Investor) => {
         const amnt = investor.amnt ?? 1;
         const reward = investor.reward ?? 0;
         return total + amnt * reward;
@@ -42,21 +52,9 @@ export const handleSubmitQuestion = async (
     const wrongIncrement = isCorrect ? 0 : 1;
     const pointsIncrement = isCorrect ? 1 : -1;
 
-    await usersColl.updateOne(
+    let updatedUser = await usersColl.findOneAndUpdate(
       { email },
       {
-        $setOnInsert: {
-          email,
-          name: session?.user?.name ?? "",
-          image: session?.user?.image ?? "",
-          currency: 0,
-          correctAnswered: 0,
-          wrongAnswered: 0,
-          points: 0,
-          isReferred: false,
-          itemsBought: [],
-          investors: [],
-        },
         $inc: {
           currency: rewardAmount,
           correctAnswered: correctIncrement,
@@ -64,10 +62,13 @@ export const handleSubmitQuestion = async (
           points: pointsIncrement,
         },
       },
-      { upsert: true },
+      { returnDocument: "after", includeResultMetadata: false },
     );
-    // Get updated user data for leaderboard
-    const updatedUser = await usersColl.findOne({ email });
+
+    if (!updatedUser) {
+      updatedUser = await usersColl.findOne({ email });
+    }
+
     const correctAnswered = updatedUser?.correctAnswered ?? 0;
     const wrongAnswered = updatedUser?.wrongAnswered ?? 0;
     const userScore =
@@ -90,6 +91,17 @@ export const handleSubmitQuestion = async (
       status: 200,
       result: "Server action done",
       isCorrect,
+      user: updatedUser
+        ? {
+            currency: updatedUser.currency,
+            correctAnswered: updatedUser.correctAnswered,
+            wrongAnswered: updatedUser.wrongAnswered,
+            points: updatedUser.points,
+            itemsBought: updatedUser.itemsBought,
+            investors: updatedUser.investors,
+            isReferred: updatedUser.isReferred,
+          }
+        : undefined,
     };
   } catch (error: any) {
     return {

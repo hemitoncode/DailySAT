@@ -2,6 +2,7 @@ import { db } from "@/services/database/mongo";
 import { ObjectId } from "mongodb";
 import { BONUS_REFERRED_PERSON, BONUS_REFERRER } from "@/shared/data/constant";
 import { handleGetSession } from "@/services/auth/auth/authActions";
+import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 
 /**
  * @swagger
@@ -52,9 +53,9 @@ export const POST = async (request: Request) => {
   }
 
   const session = await handleGetSession();
-  const email = session?.user?.email;
+  const currentUser = await ensureUserDocument(session?.user);
 
-  if (!email) {
+  if (!currentUser?.email) {
     return Response.json({
       code: 401,
       message: "User is not authenticated.",
@@ -74,23 +75,14 @@ export const POST = async (request: Request) => {
       });
     }
 
-    const user = await db.collection("users").findOne({ email });
-
-    if (!user) {
-      return Response.json({
-        code: 404,
-        message: "User not found.",
-      });
-    }
-
-    if (user._id.equals(referralCode)) {
+    if (currentUser._id && currentUser._id.toString() === referralCode) {
       return Response.json({
         code: 400,
         message: "You cannot use your own referral code.",
       });
     }
 
-    if (user.isReferred) {
+    if (currentUser.isReferred) {
       return Response.json({
         code: 400,
         message: "Referral already used. Cannot perform this action twice.",
@@ -98,7 +90,7 @@ export const POST = async (request: Request) => {
     }
 
     await db.collection("users").findOneAndUpdate(
-      { email },
+      { email: currentUser.email },
       {
         $inc: { currency: BONUS_REFERRED_PERSON },
         $set: { isReferred: true },

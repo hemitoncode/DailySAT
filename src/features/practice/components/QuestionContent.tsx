@@ -20,6 +20,7 @@ import { useCalculatorModalStore } from "@/stores/modals";
 import { handleFetchQuestion } from "@/services/practice/practice/index";
 import { QuestionData } from "@/features/practice/types/questions";
 import { handleSubmitQuestion } from "@/services/server-actions/submitQuestionAction";
+import { useUserStore } from "@/stores/user";
 import { toast } from "react-toastify";
 
 interface QuestionContentProps {
@@ -53,6 +54,7 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
   const isOpen = useCalculatorModalStore((state) => state.isOpen);
   const openModal = useCalculatorModalStore((state) => state.openModal);
   const closeModal = useCalculatorModalStore((state) => state.closeModal);
+  const updateUserStore = useUserStore((state) => state.updateUser);
 
   const fetchQuestion = async () => {
     setError(null);
@@ -86,19 +88,25 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedAnswer || !currentQuestion) return;
     const isCorrect =
       selectedAnswer === currentQuestion.questionMeta.question.correct_answer;
 
     const coinReward = currentQuestion?.questionMeta?.data?.coinReward;
-    handleSubmitQuestion(isCorrect, coinReward)
-      .then(() => {
+    try {
+      const response = await handleSubmitQuestion(isCorrect, coinReward);
+      if (response?.user) {
+        updateUserStore(response.user);
+      }
+      if (response?.status !== 200) {
+        toast.error(response?.error ?? "Failed to submit question.");
+      } else {
         toast.success("Question submitted!");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+      }
+    } catch (error: any) {
+      toast.error(error?.message ?? "Failed to submit question.");
+    }
 
     setIsCorrect(isCorrect);
     setIsSubmitted(true);

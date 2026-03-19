@@ -1,7 +1,7 @@
 import { handleGetSession } from "@/services/auth/auth/authActions";
-import { db } from "@/services/database/mongo";
 import { NextResponse } from "next/server";
 import { handleRatelimitSuccess } from "@/services/rate-limiter";
+import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 
 /**
  * @swagger
@@ -94,30 +94,7 @@ export const GET = async () => {
       throw new Error("Rate limit reached. Please try again later.");
     }
 
-    const usersCollection = db.collection("users");
-
-    // Find the user
-    let user = await usersCollection.findOne({ email: session?.user.email });
-
-    // If user doesn't exist, create a new record
-    if (!user) {
-      const newUser = {
-        email: session?.user.email,
-        name: session?.user.name,
-        image: session?.user.image,
-        id: session?.user.id,
-        currency: 0,
-        points: 0,
-        wrongAnswered: 0,
-        correctAnswered: 0,
-        isReferred: false,
-        itemsBought: [],
-      };
-
-      const result = await usersCollection.insertOne(newUser);
-      // Retrieve the newly created user for returning
-      user = await usersCollection.findOne({ _id: result.insertedId });
-    }
+    const user = await ensureUserDocument(session?.user);
 
     return NextResponse.json({ user });
   } catch (error) {

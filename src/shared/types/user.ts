@@ -2,10 +2,12 @@
 
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { Investor } from "@/features/shop/types/investor";
+import { ObjectId } from "mongodb";
 
 export interface User {
   // MongoDB string
-  _id?: string;
+  _id?: string | ObjectId;
+  id?: string;
   email: string;
   name: string;
   image: string;

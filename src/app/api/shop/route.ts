@@ -1,8 +1,9 @@
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { db } from "@/services/database/mongo";
-import { User } from "@/shared/types/user"; // assume you saved the User interface here
+import { User } from "@/shared/types/user";
 import { format } from "date-fns";
 import { handleGetSession } from "@/services/auth/auth/authActions";
+import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 
 /**
  * Appends an array of items to a user's "itemsBought" array.
@@ -11,93 +12,99 @@ import { handleGetSession } from "@/services/auth/auth/authActions";
  */
 
 export const POST = async (request: Request) => {
-  const { items, coins } = await request.json();
-  if (!Array.isArray(items)) {
+  const { items } = await request.json();
+
+  if (!Array.isArray(items) || items.length === 0) {
     return Response.json({
-      result: "Items must be an array",
+      result: "Items must be a non-empty array",
     });
   }
 
   try {
-    const users = db.collection<User>("users");
-    // Proceed with the rest of the logic
     const session = await handleGetSession();
-    const userEmail: string | null | undefined = session?.user?.email;
-    // If email isn't found, throw an error
-    if (!userEmail) {
-      throw new Error("Email not found");
+    const user = await ensureUserDocument(session?.user);
+
+    if (!user?.email) {
+      return Response.json(
+        {
+          result: "User not authenticated",
+        },
+        { status: 401 },
+      );
     }
-    // Get totalCost
-    const totalCost = items.reduce((sum, item) => {
+
+    const users = db.collection<User>("users");
+
+    const totalCost = items.reduce((sum, item: ShopItem) => {
       const quantity = item.amnt ?? 1;
       return sum + item.price * quantity;
     }, 0);
-    if (coins < totalCost)
+
+    if (totalCost <= 0) {
       return Response.json({
-        result: "Cannot complete purchase",
+        result: "Invalid purchase request",
       });
-    const result = await users.updateOne(
-      { email: userEmail },
-      {
-        $push: {
-          itemsBought: {
-            $each: items,
-          },
-        },
-        $set: {
-          currency: coins - totalCost,
-        },
-      },
-    );
-
-    let investors = items.filter((elem: ShopItem) =>
-      elem.name.includes("Investor"),
-    );
-
-    // If there are investor items, log them intok the DB
-    if (investors) {
-      const result = format(new Date(), "MM/dd/yyyy");
-
-      const formattedDate = result;
-      investors = investors.map(
-        (elem: ShopItem) =>
-          (elem = {
-            ...elem,
-            date: formattedDate,
-            reward: elem.name.includes("IV")
-              ? 20
-              : elem.name.includes("III")
-                ? 15
-                : elem.name.includes("II")
-                  ? 10
-                  : 5,
-          }),
-      );
-
-      await users.updateOne(
-        { email: userEmail },
-        {
-          $push: {
-            investors: {
-              $each: investors,
-            },
-          },
-        },
-      );
     }
 
-    if (result.matchedCount === 0) {
-      return Response.json({
-        result: "User not found",
-      });
+    const formattedDate = format(new Date(), "MM/dd/yyyy");
+    const investorItems = items
+      .filter((elem: ShopItem) => elem.name.includes("Investor"))
+      .map((elem: ShopItem) => ({
+        ...elem,
+        date: formattedDate,
+        reward: elem.name.includes("IV")
+          ? 20
+          : elem.name.includes("III")
+            ? 15
+            : elem.name.includes("II")
+              ? 10
+              : 5,
+      }));
+
+    const updateDoc: any = {
+      $inc: { currency: -totalCost },
+      $push: {
+        itemsBought: {
+          $each: items,
+        },
+      },
+    };
+
+    if (investorItems.length) {
+      updateDoc.$push.investors = {
+        $each: investorItems,
+      };
+    }
+
+    const updatedUser = await users.findOneAndUpdate(
+      { email: user.email, currency: { $gte: totalCost } },
+      updateDoc,
+      { returnDocument: "after", includeResultMetadata: false },
+    );
+
+    if (!updatedUser) {
+      return Response.json(
+        {
+          result: "Insufficient balance",
+        },
+        { status: 400 },
+      );
     }
 
     return Response.json({
       result: "Success - items bought",
+      user: {
+        currency: updatedUser.currency,
+        itemsBought: updatedUser.itemsBought,
+        investors: updatedUser.investors,
+      },
     });
   } catch {
-    return Response.json({
-      result: "DB Error",
-    });
+    return Response.json(
+      {
+        result: "DB Error",
+      },
+      { status: 500 },
+    );
   }
 };
