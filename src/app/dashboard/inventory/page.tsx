@@ -11,14 +11,7 @@ import { useUserStore } from "@/stores/user";
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { cn } from "@/utils/utils";
 
-type InventoryCategory = "icons" | "banners";
-type FilterKey = InventoryCategory | "all";
-
-const filterOptions: { key: FilterKey; label: string; note: string }[] = [
-  { key: "all", label: "All items", note: "Everything you own" },
-  { key: "icons", label: "Icons", note: "Dashboard companions" },
-  { key: "banners", label: "Banners", note: "Status ribbons" },
-];
+type InventoryCategory = "icons";
 
 const categoryStyles: Record<
   InventoryCategory,
@@ -29,16 +22,10 @@ const categoryStyles: Record<
     badge: "bg-amber-50 text-amber-700 border-amber-100",
     dot: "bg-amber-400",
   },
-  banners: {
-    label: "Banner",
-    badge: "bg-sky-50 text-sky-700 border-sky-100",
-    dot: "bg-sky-400",
-  },
 };
 
 const categorizeItem = (item: ShopItem): InventoryCategory => {
   if (/icon/i.test(item.name)) return "icons";
-  if (/banner/i.test(item.name)) return "banners";
   return "icons";
 };
 
@@ -59,7 +46,6 @@ const formatDate = (value?: string) => {
 const InventoryPage = () => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-  const [selectedCategory, setSelectedCategory] = useState<FilterKey>("all");
   const [isFetching, setIsFetching] = useState(!user);
 
   useEffect(() => {
@@ -95,38 +81,25 @@ const InventoryPage = () => {
   }, [collection]);
 
   const { spent, uniqueCategories, topCategory, averageCost } = useMemo(() => {
-    const counts: Record<InventoryCategory, number> = {
-      icons: 0,
-      banners: 0,
-    };
     let lifetimeSpend = 0;
+    let totalUnits = 0;
 
     collection.forEach((item) => {
-      const category = categorizeItem(item);
-      counts[category] += 1;
-      lifetimeSpend += item.price ?? 0;
+      const quantity = item.amnt ?? 1;
+      lifetimeSpend += (item.price ?? 0) * quantity;
+      totalUnits += quantity;
     });
 
-    const top =
-      Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "icons";
-    const unique = Object.values(counts).filter((count) => count > 0).length;
     const averageCost =
-      collection.length > 0 ? Math.round(lifetimeSpend / collection.length) : 0;
+      totalUnits > 0 ? Math.round(lifetimeSpend / totalUnits) : 0;
 
     return {
       spent: lifetimeSpend,
-      uniqueCategories: unique,
-      topCategory: top as InventoryCategory,
+      uniqueCategories: collection.length > 0 ? 1 : 0,
+      topCategory: "icons" as InventoryCategory,
       averageCost,
     };
   }, [collection]);
-
-  const filteredItems = useMemo(() => {
-    if (selectedCategory === "all") return collection;
-    return collection.filter(
-      (item) => categorizeItem(item) === selectedCategory,
-    );
-  }, [collection, selectedCategory]);
 
   const recentItems = useMemo(() => {
     if (!collection.length) return [];
@@ -141,7 +114,7 @@ const InventoryPage = () => {
           Review your <span className="text-blue-500">collection.</span>
         </PageHeader.Title>
         <PageHeader.Description>
-          Every banner and icon lives here. Keep tabs on what you own and
+          Every animal icon lives here. Keep tabs on what you own and
           what&rsquo;s left to unlock.
         </PageHeader.Description>
       </PageHeader>
@@ -171,7 +144,7 @@ const InventoryPage = () => {
               />
               <StatCard
                 label="Categories owned"
-                value={`${uniqueCategories}/2`}
+                value={`${uniqueCategories}/1`}
                 detail={`${categoryStyles[topCategory].label} is dominant`}
               />
             </section>
@@ -193,13 +166,13 @@ const InventoryPage = () => {
                       {categoryStyles[categorizeItem(heroItem)].label}
                     </span>
                     <span className="rounded-full border border-gray-200 px-3 py-1">
-                      {formatCoins(heroItem.price ?? 0)}
+                      {formatCoins(
+                        (heroItem.price ?? 0) * (heroItem.amnt ?? 1),
+                      )}
                     </span>
-                    {heroItem.amnt && (
-                      <span className="rounded-full border border-gray-200 px-3 py-1">
-                        Qty {heroItem.amnt}
-                      </span>
-                    )}
+                    <span className="rounded-full border border-gray-200 px-3 py-1">
+                      Qty {heroItem.amnt ?? 1}
+                    </span>
                   </div>
                 </div>
 
@@ -224,7 +197,7 @@ const InventoryPage = () => {
                       <div>
                         <p className="text-sm font-semibold text-slate-900">
                           {uniqueCategories
-                            ? `${uniqueCategories} of 2 categories`
+                            ? "Animal icons unlocked"
                             : "Grab your first icon"}
                         </p>
                         <p className="text-xs text-slate-500">
@@ -259,38 +232,16 @@ const InventoryPage = () => {
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
-                    Filter inventory
+                    Collection ledger
                   </p>
                   <p className="text-sm text-slate-500">
-                    Tap to narrow your view.
+                    Every animal icon you own appears here.
                   </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {filterOptions.map((option) => (
-                    <button
-                      key={option.key}
-                      type="button"
-                      onClick={() => setSelectedCategory(option.key)}
-                      className={cn(
-                        "rounded-full border px-4 py-2 text-left transition",
-                        selectedCategory === option.key
-                          ? "border-blue-500 bg-blue-50 text-blue-600"
-                          : "border-gray-200 bg-white text-slate-600 hover:border-gray-300",
-                      )}
-                    >
-                      <p className="text-xs font-semibold tracking-[0.2em] uppercase">
-                        {option.label}
-                      </p>
-                      <p className="text-[11px] text-slate-500">
-                        {option.note}
-                      </p>
-                    </button>
-                  ))}
                 </div>
               </div>
 
               <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {filteredItems.map((item, index) => (
+                {collection.map((item, index) => (
                   <InventoryCard
                     key={`${item.name}-${index}`}
                     item={item}
@@ -338,7 +289,7 @@ const InventoryPage = () => {
                         </div>
                       </div>
                       <p className="text-sm font-medium text-slate-700">
-                        {formatCoins(item.price ?? 0)}
+                        {formatCoins((item.price ?? 0) * (item.amnt ?? 1))}
                       </p>
                     </div>
                     <p className="text-xs text-slate-500">
@@ -383,13 +334,11 @@ const InventoryCard = ({ item, index }: { item: ShopItem; index: number }) => {
       <p className="mt-2 text-sm text-slate-600">{item.purpose}</p>
       <div className="mt-5 grid gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
         <span className="rounded-full border border-gray-200 px-3 py-1">
-          {formatCoins(item.price ?? 0)}
+          {formatCoins((item.price ?? 0) * (item.amnt ?? 1))}
         </span>
-        {item.amnt && (
-          <span className="rounded-full border border-gray-200 px-3 py-1">
-            Qty {item.amnt}
-          </span>
-        )}
+        <span className="rounded-full border border-gray-200 px-3 py-1">
+          Qty {item.amnt ?? 1}
+        </span>
       </div>
     </motion.div>
   );
@@ -435,8 +384,8 @@ const EmptyState = () => (
     </p>
     <p className="mt-3 text-3xl text-slate-900">Start filling your vault</p>
     <p className="mt-2 text-sm text-slate-500">
-      Purchases from the shop will appear here instantly. Icons or banners… grab
-      your first one to unlock this ledger.
+      Purchases from the shop will appear here instantly. Grab your first animal
+      icon to unlock this ledger.
     </p>
     <Link
       href="/shop"

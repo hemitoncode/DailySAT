@@ -10,7 +10,6 @@ import Link from "next/link";
 import { Book, Calendar, Sigma } from "lucide-react";
 import { useUserStore } from "@/stores/user";
 import { User } from "@/shared/types/user";
-import { DisplayBanner } from "@/features/dashboard/types/banner";
 import RedeemReferral from "@/features/dashboard/components/RedeemReferral";
 import { toast } from "react-toastify";
 import { PageHeader } from "@/shared/components";
@@ -22,10 +21,6 @@ const Home = () => {
   const [greeting, setGreeting] = useState("");
   const [imageError, setImageError] = useState(false);
   const [userCoins, setUserCoins] = useState<number>(0);
-  const [banner, setBanner] = useState<DisplayBanner>({
-    style: "",
-    content: "",
-  });
 
   const getIcon = (userData?: User) => {
     const icons = userData?.itemsBought?.filter((item) =>
@@ -38,44 +33,6 @@ const Home = () => {
     setIcon(mostExpensiveIcon.name.split(" ").join("-").toLowerCase());
   };
 
-  const getBanner = (userData?: User) => {
-    const banners = userData?.itemsBought?.filter((item) =>
-      item.name.includes("Banner"),
-    );
-    if (!banners?.length) return;
-    const mostExpensiveBanner = banners.reduce((max, item) =>
-      item.price > max.price ? item : max,
-    );
-
-    const bannerMap: { [key: string]: DisplayBanner } = {
-      diamondbanner: {
-        style:
-          "bg-[#00d3f2] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#a2f4fd] h-[150px] w-full rounded-xl",
-        content: "Congratulations on your Diamond Banner",
-      },
-      emeraldbanner: {
-        style:
-          "bg-[#009966] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#5ee9b5] h-[150px] w-full rounded-xl",
-        content: "Congratulations on your Emerald Banner",
-      },
-      goldbanner: {
-        style:
-          "bg-[#FFD700] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#fff085] h-[150px] w-full rounded-xl",
-        content: "Congratulations on your Gold Banner",
-      },
-      bronzebanner: {
-        style:
-          "bg-[#9E5E23] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#E0AF7D] h-[150px] w-full rounded-xl",
-        content: "Congratulations on your Bronze Banner",
-      },
-    };
-
-    const bannerKey = mostExpensiveBanner?.name
-      ?.toLowerCase()
-      ?.replace(/\s/g, "");
-    if (bannerKey && bannerMap[bannerKey]) setBanner(bannerMap[bannerKey]);
-  };
-
   useEffect(() => {
     const handleGetUser = async () => {
       try {
@@ -83,7 +40,6 @@ const Home = () => {
         const userData: User | undefined = response?.data?.user;
         setUserCoins(userData?.currency ?? 0);
         getIcon(userData);
-        getBanner(userData);
         setUser?.(userData ?? null);
       } catch {
         toast.error("Sorry, we could not get your user data");
@@ -337,17 +293,6 @@ const Home = () => {
             <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
         </div>
-
-        {/* Banner */}
-        {user?.itemsBought?.some((item) => item.name.includes("Banner")) &&
-          banner?.style && (
-            <div className={banner.style}>
-              <p>
-                {banner.content}
-                {user?.name ? `, ${user.name.split(" ")[0]}!` : "!"}
-              </p>
-            </div>
-          )}
       </div>
     </div>
   );

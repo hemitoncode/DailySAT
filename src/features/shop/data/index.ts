@@ -1,13 +1,15 @@
+import { ShopItem } from "@/features/shop/types/shopItem";
+
 // Shop Categories Help Text
 export const Notes = {
   animal:
-    "You can only buy one of each. You can't buy one if you already have it. The most expensive one is the one that is shown.",
-  banners:
-    "You can only buy one of each. You can't buy one if you already have it.",
+    "Collect as many icons as you like—the priciest animal you own is still highlighted across the app.",
 };
 
+type ShopCatalogItem = Pick<ShopItem, "name" | "price" | "purpose">;
+
 // Shop Items Configuration
-export const Items = {
+export const Items: { animal: ShopCatalogItem[] } = {
   animal: [
     {
       name: "Cheetah Icon",
@@ -30,26 +32,18 @@ export const Items = {
       purpose: "Have a tiger icon up next to your name on the dashboard!",
     },
   ],
-  banners: [
-    {
-      name: "Bronze Banner",
-      price: 1000,
-      purpose: "Have a bronze ribbon show up dashboard!",
-    },
-    {
-      name: "Gold Banner",
-      price: 2000,
-      purpose: "Have a gold ribbon show up dashboard!",
-    },
-    {
-      name: "Diamond Banner",
-      price: 3000,
-      purpose: "Have a diamond ribbon show up dashboard!",
-    },
-    {
-      name: "Emerald Banner",
-      price: 5000,
-      purpose: "Have an emerald ribbon show up dashboard!",
-    },
-  ],
 };
+
+export const normalizeShopItemKey = (value: string) =>
+  value.toLowerCase().replace(/\s+/g, "");
+
+const flattenCatalog = Object.values(Items).flat();
+
+export const SHOP_ITEM_CATALOG: Record<string, ShopCatalogItem> =
+  flattenCatalog.reduce(
+    (acc, item) => {
+      acc[normalizeShopItemKey(item.name)] = item;
+      return acc;
+    },
+    {} as Record<string, ShopCatalogItem>,
+  );

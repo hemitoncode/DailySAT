@@ -1,13 +1,10 @@
 // UI Components and Icons
 import { Minus, Plus } from "lucide-react";
 
-// Types
-import { DisplayBanner } from "@/features/dashboard/types/banner";
 import Image from "next/image";
 import { useShop } from "@/hooks/useShop";
-import { ShopItem } from "@/features/shop/types/shopItem";
+import { normalizeShopItemKey } from "@/features/shop/data";
 import { useUserStore } from "@/stores/user";
-import { useEffect } from "react";
 
 interface ComponentShopItem {
   name: string;
@@ -24,48 +21,11 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({
   const { state, increment, decrement } = useShop();
   const user = useUserStore((s) => s.user);
 
-  useEffect(() => {
-    const handleGetItems = (e: Event) => {
-      window.dispatchEvent(
-        new CustomEvent("buy-items", { detail: { items: state } }),
-      );
-    };
-    window.addEventListener("get-items-to-buy", handleGetItems);
-    return () => window.removeEventListener("get-items-to-buy", handleGetItems);
-  }, [state]);
-
-  const bannerMap: { [key: string]: DisplayBanner } = {
-    diamondbanner: {
-      style:
-        "bg-[#00d3f2] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#a2f4fd] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
-      content: "Congratulations on your Diamond Banner",
-    },
-    emeraldbanner: {
-      style:
-        "bg-[#009966] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#5ee9b5] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
-      content: "Congratulations on your Emerald Banner",
-    },
-    goldbanner: {
-      style:
-        "bg-[#FFD700] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#fff085] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
-      content: "Congratulations on your Gold Banner",
-    },
-    bronzebanner: {
-      style:
-        "bg-[#9E5E23] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#E0AF7D] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
-      content: "Congratulations on your Bronze Banner",
-    },
-  };
-
-  const itemKey = name.toLowerCase().replace(/\s/g, "");
+  const itemKey = normalizeShopItemKey(name);
   const qty = state[itemKey] ?? 0;
+  const typeLabel = name.toLowerCase().includes("icon") ? "Icon" : "Item";
 
-  const isIncrementDisabled =
-    !user ||
-    price > (user?.currency ?? 0) ||
-    (user?.itemsBought?.some((item: ShopItem) => item.name === name) ??
-      false) ||
-    qty === 1;
+  const isIncrementDisabled = !user || price > (user?.currency ?? 0);
 
   const isDecrementDisabled = qty === 0;
 
@@ -82,17 +42,10 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({
         />
       )}
 
-      {/* Banner swatch */}
-      {name.includes("Banner") && <div className={bannerMap[itemKey]?.style} />}
-
       {/* Item info */}
       <div>
         <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-500 mb-1">
-          {name.includes("Banner")
-            ? "Banner"
-            : name.includes("Icon")
-              ? "Icon"
-              : "Item"}
+          {typeLabel}
         </p>
         <h2 className="text-lg font-bold text-gray-900 leading-tight">
           {name}

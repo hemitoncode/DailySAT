@@ -57,10 +57,6 @@ const Checkout = () => {
     tigericon: ["Tiger Icon", 400],
     sharkicon: ["Shark Icon", 350],
     cheetahicon: ["Cheetah Icon", 250],
-    bronzebanner: ["Bronze Banner", 1000],
-    goldbanner: ["Gold Banner", 2000],
-    diamondbanner: ["Diamond Banner", 3000],
-    emeraldbanner: ["Emerald Banner", 5000],
   };
 
   // Function to fetch user data and process URL parameters
@@ -93,9 +89,6 @@ const Checkout = () => {
       const total = newReceipt.reduce((acc, item) => {
         const key = Object.keys(item)[0];
         if (!(key in namePriceMap)) {
-          redirect("/shop");
-        }
-        if (key.includes("banner") && item[key] > 1) {
           redirect("/shop");
         }
         return acc + item[key] * namePriceMap[key][1];

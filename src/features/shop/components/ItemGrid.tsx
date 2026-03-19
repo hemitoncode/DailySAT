@@ -3,12 +3,10 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Items, Notes } from "@/features/shop/data/index";
 import ShopItemDisplay from "@/features/shop/components/ShopItem";
 import { ShopItem } from "@/features/shop/types/shopItem";
-import { useGridStore } from "@/stores/shop";
 import { useUserStore } from "@/stores/user";
 
 export default function ItemGrid() {
   const user = useUserStore((state) => state.user);
-  const grid = useGridStore((state) => state.grid);
 
   if (!user || user.currency === -1) {
     return (
@@ -22,13 +20,13 @@ export default function ItemGrid() {
 
   return (
     <>
-      {Notes[grid] && (
+      {Notes.animal && (
         <p className="text-xs font-medium text-gray-400 text-center tracking-wide">
-          {Notes[grid]}
+          {Notes.animal}
         </p>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {Items[grid].map((item: ShopItem, index: number) => (
+        {Items.animal.map((item: ShopItem, index: number) => (
           <ShopItemDisplay
             key={index}
             name={item.name}

@@ -52,9 +52,15 @@ export default function ItemDialog({ user }: { user: any }) {
                   key={index}
                   className="flex justify-between items-center bg-slate-50 border border-gray-200 rounded-xl px-4 py-3"
                 >
-                  <span className="text-xs font-semibold text-gray-900 w-1/2 truncate">{item.name}</span>
-                  <span className="text-xs text-gray-500 w-1/4 text-center">×{item.amnt}</span>
-                  <span className="text-xs font-semibold text-blue-500 w-1/4 text-right">{item.price} coins</span>
+                  <span className="text-xs font-semibold text-gray-900 w-1/2 truncate">
+                    {item.name}
+                  </span>
+                  <span className="text-xs text-gray-500 w-1/4 text-center">
+                    ×{item.amnt ?? 1}
+                  </span>
+                  <span className="text-xs font-semibold text-blue-500 w-1/4 text-right">
+                    {(item.price ?? 0) * (item.amnt ?? 1)} coins
+                  </span>
                 </div>
               ))}
             </div>

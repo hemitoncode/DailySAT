@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import UserCoinDisplay from "@/features/shop/components/UserCoinDisplay";
-import ShopGridTabs from "@/features/shop/components/ShopGridTabs";
 import ItemGrid from "@/features/shop/components/ItemGrid";
 import CheckoutButton from "@/features/shop/components/CheckoutButton";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -52,8 +51,7 @@ export default function Shop() {
         )}
       </PageHeader>
 
-      <div className="px-8 md:px-16 py-8 space-y-6">
-        <ShopGridTabs />
+      <div className="px-8 md:px-16 py-8">
         <ItemGrid />
       </div>
 
