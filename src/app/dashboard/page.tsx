@@ -21,60 +21,41 @@ const Home = () => {
   const [greeting, setGreeting] = useState("");
   const [imageError, setImageError] = useState(false);
   const [userCoins, setUserCoins] = useState<number>(0);
-  const [banner, setBanner] = useState<DisplayBanner>({
-    style: "",
-    content: "",
-  });
+  const [banner, setBanner] = useState<DisplayBanner>({ style: "", content: "" });
 
   const getIcon = (userData?: User) => {
-    const icons = userData?.itemsBought?.filter((item) =>
-      item.name.includes("Icon"),
-    );
+    const icons = userData?.itemsBought?.filter((item) => item.name.includes("Icon"));
     if (!icons?.length) return;
-    const mostExpensiveIcon = icons.reduce((max, item) =>
-      item.price > max.price ? item : max,
-    );
+    const mostExpensiveIcon = icons.reduce((max, item) => item.price > max.price ? item : max);
     setIcon(mostExpensiveIcon.name.split(" ").join("-").toLowerCase());
   };
 
   const getBanner = (userData?: User) => {
-    const banners = userData?.itemsBought?.filter((item) =>
-      item.name.includes("Banner"),
-    );
+    const banners = userData?.itemsBought?.filter((item) => item.name.includes("Banner"));
     if (!banners?.length) return;
-    const mostExpensiveBanner = banners.reduce((max, item) =>
-      item.price > max.price ? item : max,
-    );
+    const mostExpensiveBanner = banners.reduce((max, item) => item.price > max.price ? item : max);
 
     const bannerMap: { [key: string]: DisplayBanner } = {
       diamondbanner: {
-        style:
-          "bg-[#00d3f2] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#a2f4fd] h-[150px] w-full rounded-xl",
-        content: `Congratulations on your Diamond Banner`,
+        style: "bg-[#00d3f2] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#a2f4fd] h-[150px] w-full rounded-xl",
+        content: "Congratulations on your Diamond Banner",
       },
       emeraldbanner: {
-        style:
-          "bg-[#009966] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#5ee9b5] h-[150px] w-full rounded-xl",
-        content: `Congratulations on your Emerald Banner`,
+        style: "bg-[#009966] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#5ee9b5] h-[150px] w-full rounded-xl",
+        content: "Congratulations on your Emerald Banner",
       },
       goldbanner: {
-        style:
-          "bg-[#FFD700] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#fff085] h-[150px] w-full rounded-xl",
-        content: `Congratulations on your Gold Banner`,
+        style: "bg-[#FFD700] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#fff085] h-[150px] w-full rounded-xl",
+        content: "Congratulations on your Gold Banner",
       },
       bronzebanner: {
-        style:
-          "bg-[#9E5E23] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#E0AF7D] h-[150px] w-full rounded-xl",
-        content: `Congratulations on your Bronze Banner`,
+        style: "bg-[#9E5E23] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#E0AF7D] h-[150px] w-full rounded-xl",
+        content: "Congratulations on your Bronze Banner",
       },
     };
 
-    const bannerKey = mostExpensiveBanner?.name
-      ?.toLowerCase()
-      ?.replace(/\s/g, "");
-    if (bannerKey && bannerMap[bannerKey]) {
-      setBanner(bannerMap[bannerKey]);
-    }
+    const bannerKey = mostExpensiveBanner?.name?.toLowerCase()?.replace(/\s/g, "");
+    if (bannerKey && bannerMap[bannerKey]) setBanner(bannerMap[bannerKey]);
   };
 
   useEffect(() => {
@@ -90,7 +71,6 @@ const Home = () => {
         toast.error("Sorry, we could not get your user data");
       }
     };
-
     handleGetUser();
   }, []);
 
@@ -109,61 +89,67 @@ const Home = () => {
     await navigator.clipboard.writeText(referralCode);
   };
 
-  const toggleImageError = () => {
-    setImageError((prevState) => !prevState);
-  };
+  const toggleImageError = () => setImageError((prev) => !prev);
 
   return (
-    <div className="mb-10">
-      <div className="flex flex-col items-center mt-8">
+    <div className="min-h-screen w-full bg-slate-50 font-sans pb-16">
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');`}</style>
+
+      {/* Top accent bar */}
+      <div className="h-1 w-full bg-gradient-to-r from-blue-800 via-blue-500 to-blue-400" />
+
+      {/* Page header */}
+      <div className="w-full bg-white border-b border-gray-200 px-8 md:px-16 py-8">
+        <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-500 mb-1">
+          SAT Prep · Dashboard
+        </p>
         {user ? (
-          <h1 className="text-xl md:text-4xl font-bold text-gray-800">
-            {greeting ? `${greeting}!` : "Loading greeting..."}
+          <h1
+            className="text-4xl md:text-5xl text-gray-900 leading-tight"
+            style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+          >
+            {greeting ? `${greeting}` : "Welcome back"},{" "}
+            <span className="text-blue-500">{user?.name?.split(" ")[0]}.</span>
           </h1>
         ) : (
-          <Skeleton className="md:w-[400px] w-[250px] md:h-[40px] h-[28px] rounded-full bg-black/60" />
+          <Skeleton className="w-64 md:w-96 h-12 rounded-full bg-gray-200" />
         )}
         {user ? (
-          <p className="text-xs md:text-base text-gray-600 font-light">
-            Choose what to study and start practicing...
+          <p className="text-sm text-gray-500 font-light mt-1">
+            Choose what to study and start practicing.
           </p>
         ) : (
-          <Skeleton className="md:w-[313px] h-[16px] w-[225px] md:h-[24px] mt-1 rounded-full bg-gray-400" />
+          <Skeleton className="w-48 h-4 mt-2 rounded-full bg-gray-200" />
         )}
       </div>
 
-      <div className="lg:px-16 lg:p-6 px-2">
-        <div className="grid grids-cols-1 md:grid-cols-3 mx-auto md:w-4/5 gap-2 mt-px">
+      <div className="px-8 md:px-16 py-8 space-y-6">
+
+        {/* Quick nav options */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {user ? (
-            <Option
-              icon={<Book />}
-              header="English"
-              redirect="/practice/english"
-            />
+            <Option icon={<Book size={16} />} header="English" redirect="/practice/english" />
           ) : (
-            <Skeleton className="w-full h-[64px] bg-gray-700/60" />
+            <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <Option icon={<Sigma />} header="Math" redirect="/practice/math" />
+            <Option icon={<Sigma size={16} />} header="Math" redirect="/practice/math" />
           ) : (
-            <Skeleton className="w-full h-[64px] bg-gray-700/60" />
+            <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <Option
-              icon={<Calendar />}
-              header="Study Plan"
-              redirect="/dashboard/study-plan"
-            />
+            <Option icon={<Calendar size={16} />} header="Study Plan" redirect="/dashboard/study-plan" />
           ) : (
-            <Skeleton className="w-full h-[64px] bg-gray-700/60" />
+            <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
         </div>
-      </div>
 
-      <div className="lg:flex lg:space-x-2 mt-1.5 p-3.5">
-        <div className="rounded-lg w-full bg-white p-4 flex lg:items-center flex-col lg:flex-row lg:justify-between">
-          <div className="flex items-center mb-3">
-            <div className="relative">
+        {/* Profile card */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+          {/* Avatar + info */}
+          <div className="flex items-center gap-5">
+            <div className="relative shrink-0">
               {user ? (
                 <Image
                   src={
@@ -171,139 +157,126 @@ const Home = () => {
                     "https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable-social-media-profiles-icons-screensavers-as-templatex9xa_719432-875.jpg"
                   }
                   alt="userpfpic"
-                  width={120}
-                  height={120}
+                  width={96}
+                  height={96}
                   onError={toggleImageError}
-                  className="rounded-2xl"
+                  className="rounded-2xl border border-gray-200 object-cover"
                 />
               ) : (
-                <Skeleton className="w-[120px] h-[120px] rounded-2xl bg-gray-400" />
+                <Skeleton className="w-24 h-24 rounded-2xl bg-gray-200" />
               )}
               {icon && (
                 <Image
                   src={`/icons/rewards/${icon}.png`}
                   alt="Icon"
-                  width={80}
-                  height={80}
-                  className="absolute -right-6 -top-6"
+                  width={36}
+                  height={36}
+                  className="absolute -right-3 -top-3"
                 />
               )}
             </div>
-            <div className="ml-6">
+
+            <div>
               {user ? (
                 <>
-                  <p className="text-3xl font-bold text-blue-600">
+                  <p
+                    className="text-3xl text-blue-500 leading-tight"
+                    style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+                  >
                     {user?.name}
                   </p>
-                  <p>Email: {user?.email}</p>
+                  <p className="text-xs text-gray-400 font-light mt-0.5">{user?.email}</p>
                 </>
               ) : (
                 <>
-                  <Skeleton className="w-[200px] h-[35px] rounded-full bg-blue-600" />
-                  <Skeleton className="w-[200px] h-[24px] mt-4 rounded-full bg-gray-400" />
+                  <Skeleton className="w-40 h-8 rounded-full bg-gray-200" />
+                  <Skeleton className="w-32 h-3 mt-2 rounded-full bg-gray-200" />
                 </>
               )}
             </div>
           </div>
 
-          <div className="lg:mr-[10vw] relative">
+          {/* Referral code */}
+          <div className="lg:mr-12">
             {user ? (
-              <>
-                <p className="text-xl font-semibold text-green-600">
+              <div className="bg-slate-50 border border-gray-200 rounded-xl px-4 py-3">
+                <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-500 mb-1.5">
                   Referral Code
                 </p>
-                <p className="text-gray-700 flex items-center mb-2">
-                  <button onClick={handleCopyReferral}>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleCopyReferral}
+                    className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center hover:bg-blue-100 transition"
+                    title="Copy referral code"
+                  >
                     <Image
                       src="/icons/copy.png"
-                      className="w-10 h-10"
-                      alt="Copy Referral Code"
-                      width={100}
-                      height={100}
+                      className="w-4 h-4"
+                      alt="Copy"
+                      width={16}
+                      height={16}
                     />
                   </button>
-                  {user?._id?.toString() ?? "Unavailable"}
-                </p>
-              </>
+                  <p className="text-sm text-gray-600 font-mono">
+                    {user?._id?.toString() ?? "Unavailable"}
+                  </p>
+                </div>
+              </div>
             ) : (
               <>
-                <Skeleton className="w-[150px] h-[28px] bg-green-600/80 rounded-full" />
-                <Skeleton className="w-[200px] h-[24px] mt-4 rounded-full bg-gray-400" />
+                <Skeleton className="w-28 h-4 rounded-full bg-gray-200" />
+                <Skeleton className="w-44 h-8 mt-2 rounded-xl bg-gray-200" />
               </>
             )}
           </div>
         </div>
-      </div>
 
-      <div className="p-3.5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Stats row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {user ? (
-            <StatDisplay
-              type="coins"
-              color="black"
-              icon="coin"
-              header="DailySAT Coins:"
-              number={userCoins}
-            />
+            <StatDisplay type="coins" color="#3b82f6" icon="coin" header="DailySAT Coins" number={userCoins} />
           ) : (
-            <Skeleton className="w-full h-[200px] mb-2 bg-gray-600/60" />
+            <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <StatDisplay
-              type="attempts"
-              color="green"
-              icon="checked"
-              header="Correct Answers:"
-              number={user?.correctAnswered ?? 0}
-            />
+            <StatDisplay type="correct" color="#22c55e" icon="checked" header="Correct Answers" number={user?.correctAnswered ?? 0} />
           ) : (
-            <Skeleton className="w-full h-[200px] mb-2 bg-gray-600/60" />
+            <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <StatDisplay
-              type="attempts"
-              color="#ff5454"
-              icon="cross"
-              header="Mistakes:"
-              number={user?.wrongAnswered ?? 0}
-            />
+            <StatDisplay type="mistakes" color="#ef4444" icon="cross" header="Mistakes" number={user?.wrongAnswered ?? 0} />
           ) : (
-            <Skeleton className="w-full h-[200px] mb-2 bg-gray-600/60" />
+            <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Referral + Shop row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {!user?.isReferred && (
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center justify-center min-h-[200px]">
+            <div className="bg-white border border-gray-200 rounded-2xl p-5">
               <RedeemReferral />
             </div>
           )}
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center justify-center min-h-[200px]">
+          <div className="bg-white border border-gray-200 rounded-2xl p-5">
             {user ? (
-              <Link href="/shop" className="w-full">
-                <StatDisplay
-                  type="items bought"
-                  color="#2563EA"
-                  icon="shop"
-                  header="Shop:"
-                  number={user?.itemsBought?.length ?? 0}
-                />
+              <Link href="/shop" className="w-full block">
+                <StatDisplay type="items" color="#3b82f6" icon="shop" header="Shop" number={user?.itemsBought?.length ?? 0} />
               </Link>
             ) : (
-              <Skeleton className="w-full h-[200px] mb-2 bg-gray-600/60" />
+              <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
             )}
           </div>
         </div>
 
-        {user?.itemsBought?.some((item) => item.name.includes("Banner")) &&
-          banner?.style && (
-            <div className={banner.style}>
-              <p>
-                {banner.content}
-                {user?.name ? `, ${user.name.split(" ")[0]}!` : "!"}
-              </p>
-            </div>
-          )}
+        {/* Banner */}
+        {user?.itemsBought?.some((item) => item.name.includes("Banner")) && banner?.style && (
+          <div className={banner.style}>
+            <p>
+              {banner.content}
+              {user?.name ? `, ${user.name.split(" ")[0]}!` : "!"}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
