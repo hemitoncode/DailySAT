@@ -8,6 +8,7 @@ import {
   EnglishSubjects,
   MathSubjects,
 } from "@/features/practice/types/subject";
+import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
 
 export const GET = async (request: Request) => {
   const { searchParams } = new URL(request.url);
@@ -53,9 +54,26 @@ export const GET = async (request: Request) => {
       .aggregate([{ $match: matchObject }, { $sample: { size: 1 } }])
       .next();
 
+    if (!questionMeta) {
+      return Response.json(
+        {
+          error: "No question found for the supplied filters",
+        },
+        { status: 404 },
+      );
+    }
+
+    const questionMetaWithReward = {
+      ...questionMeta,
+      data: {
+        ...(questionMeta.data ?? {}),
+        coinReward: QUESTION_IS_CORRECT_POINTS,
+      },
+    };
+
     return Response.json(
       {
-        questionMeta,
+        questionMeta: questionMetaWithReward,
       },
       { status: 200 },
     );
