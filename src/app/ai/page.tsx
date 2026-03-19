@@ -1,11 +1,17 @@
 "use client";
 
-import type React from "react"
-import { useState } from "react"
-import { generateStudyPlan } from "@/services/ai/ai/generateStudyPlan"
-import { StudyPlan } from "@/features/ai-planner/components/StudyPlan"
-import { StudyPlanData, StudyDay, DebugPlan, ValidPlan } from "@/features/ai-planner/types/ai"
-import { toast } from "react-toastify"
+import type React from "react";
+import { useState } from "react";
+import { generateStudyPlan } from "@/services/ai/ai/generateStudyPlan";
+import { StudyPlan } from "@/features/ai-planner/components/StudyPlan";
+import {
+  StudyPlanData,
+  StudyDay,
+  DebugPlan,
+  ValidPlan,
+} from "@/features/ai-planner/types/ai";
+import { toast } from "react-toastify";
+import { PageHeader } from "@/shared/components";
 
 const AI = () => {
   const [currentScore, setCurrentScore] = useState("");
@@ -42,7 +48,7 @@ const AI = () => {
                 const date = new Date(currentDate);
                 date.setDate(currentDate.getDate() + index);
                 return { ...day, date: date.toISOString().split("T")[0] };
-              }
+              },
             );
             setStudyPlan({
               ...parsedPlan,
@@ -81,7 +87,9 @@ const AI = () => {
   };
 
   const scoreDelta =
-    currentScore && targetScore ? Number(targetScore) - Number(currentScore) : null;
+    currentScore && targetScore
+      ? Number(targetScore) - Number(currentScore)
+      : null;
 
   const inputBase =
     "w-full px-3.5 py-2.5 border border-gray-200 rounded-xl bg-gray-50 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10 transition";
@@ -91,31 +99,23 @@ const AI = () => {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');`}</style>
       {step === 1 ? (
         <div className="flex flex-col min-h-screen w-full">
-          {/* Top accent bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-blue-800 via-blue-500 to-blue-400" />
-
-          {/* Header */}
-          <div className="w-full bg-white border-b border-gray-200 px-16 py-9">
-            <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-500 mb-2">
+          <PageHeader contentClassName="px-16 py-9">
+            <PageHeader.Eyebrow className="mb-2">
               SAT Prep · AI Powered
-            </p>
-            <h1
-              className="text-5xl text-gray-900 leading-tight mb-2"
-              style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
-            >
-              Build your{" "}
-              <span className="text-blue-500">study plan.</span>
-            </h1>
-            <p className="text-sm text-gray-500 font-light">
-              Enter your scores and test date — we'll generate a personalized day-by-day SAT roadmap in seconds.
-            </p>
-          </div>
+            </PageHeader.Eyebrow>
+            <PageHeader.Title className="text-5xl mb-2">
+              Build your <span className="text-blue-500">study plan.</span>
+            </PageHeader.Title>
+            <PageHeader.Description className="mt-0">
+              Enter your scores and test date — we'll generate a personalized
+              day-by-day SAT roadmap in seconds.
+            </PageHeader.Description>
+          </PageHeader>
 
           {/* Form body */}
           <div className="flex-1 w-full bg-slate-50 px-16 py-10">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-3 gap-5 w-full mb-5">
-
                 {/* Current Score */}
                 <div className="bg-white border border-gray-200 rounded-2xl p-5">
                   <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-500 mb-2">
@@ -164,8 +164,18 @@ const AI = () => {
                   />
                   {scoreDelta !== null && scoreDelta > 0 && (
                     <div className="mt-2.5 inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-2.5 py-1 text-[11px] font-semibold text-blue-500">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      <svg
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
                       </svg>
                       +{scoreDelta} point goal
                     </div>
@@ -185,9 +195,18 @@ const AI = () => {
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.8}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                     </span>
                     <input
@@ -197,7 +216,11 @@ const AI = () => {
                       onChange={(e) => setTestDate(e.target.value)}
                       required
                       min={new Date(Date.now()).toISOString().split("T")[0]}
-                      max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
+                      max={
+                        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                          .toISOString()
+                          .split("T")[0]
+                      }
                       className={`${inputBase} pl-10`}
                     />
                   </div>
@@ -234,17 +257,43 @@ const AI = () => {
                 >
                   {isLoading ? (
                     <>
-                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <svg
+                        className="animate-spin h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                       Generating your plan…
                     </>
                   ) : (
                     <>
                       Generate Study Plan
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17 8l4 4m0 0l-4 4m4-4H3"
+                        />
                       </svg>
                     </>
                   )}
@@ -264,7 +313,9 @@ const AI = () => {
               <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-300">
                 Your personalized plan
               </p>
-              <h2 className="text-3xl font-bold text-white tracking-tight">SAT Study Plan</h2>
+              <h2 className="text-3xl font-bold text-white tracking-tight">
+                SAT Study Plan
+              </h2>
               {testDate && (
                 <p className="text-sm text-blue-200 font-light">
                   Test date:{" "}
@@ -281,15 +332,33 @@ const AI = () => {
             {currentScore && targetScore && (
               <div className="flex items-center gap-3 shrink-0">
                 <div className="flex flex-col items-center bg-white/10 border border-white/15 rounded-xl px-5 py-3">
-                  <span className="text-2xl font-bold text-white tracking-tight leading-none">{currentScore}</span>
-                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">Current</span>
+                  <span className="text-2xl font-bold text-white tracking-tight leading-none">
+                    {currentScore}
+                  </span>
+                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">
+                    Current
+                  </span>
                 </div>
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <svg
+                  className="w-5 h-5 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
                 <div className="flex flex-col items-center bg-blue-300/15 border border-blue-300/40 rounded-xl px-5 py-3">
-                  <span className="text-2xl font-bold text-white tracking-tight leading-none">{targetScore}</span>
-                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">Target</span>
+                  <span className="text-2xl font-bold text-white tracking-tight leading-none">
+                    {targetScore}
+                  </span>
+                  <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider mt-1">
+                    Target
+                  </span>
                 </div>
               </div>
             )}
@@ -301,8 +370,19 @@ const AI = () => {
               onClick={resetForm}
               className="flex items-center gap-2 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg px-3.5 py-2 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-500 transition"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               Back to Form
             </button>

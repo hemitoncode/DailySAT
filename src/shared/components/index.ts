@@ -13,3 +13,4 @@ export {
 } from "./Card";
 export { Badge, badgeVariants } from "./Badge";
 export { default as ErrorBoundary } from "./ErrorBoundary";
+export { default as PageHeader } from "./PageHeader";

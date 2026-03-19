@@ -13,6 +13,7 @@ import { User } from "@/shared/types/user";
 import { DisplayBanner } from "@/features/dashboard/types/banner";
 import RedeemReferral from "@/features/dashboard/components/RedeemReferral";
 import { toast } from "react-toastify";
+import { PageHeader } from "@/shared/components";
 
 const Home = () => {
   const [icon, setIcon] = useState("");
@@ -21,40 +22,57 @@ const Home = () => {
   const [greeting, setGreeting] = useState("");
   const [imageError, setImageError] = useState(false);
   const [userCoins, setUserCoins] = useState<number>(0);
-  const [banner, setBanner] = useState<DisplayBanner>({ style: "", content: "" });
+  const [banner, setBanner] = useState<DisplayBanner>({
+    style: "",
+    content: "",
+  });
 
   const getIcon = (userData?: User) => {
-    const icons = userData?.itemsBought?.filter((item) => item.name.includes("Icon"));
+    const icons = userData?.itemsBought?.filter((item) =>
+      item.name.includes("Icon"),
+    );
     if (!icons?.length) return;
-    const mostExpensiveIcon = icons.reduce((max, item) => item.price > max.price ? item : max);
+    const mostExpensiveIcon = icons.reduce((max, item) =>
+      item.price > max.price ? item : max,
+    );
     setIcon(mostExpensiveIcon.name.split(" ").join("-").toLowerCase());
   };
 
   const getBanner = (userData?: User) => {
-    const banners = userData?.itemsBought?.filter((item) => item.name.includes("Banner"));
+    const banners = userData?.itemsBought?.filter((item) =>
+      item.name.includes("Banner"),
+    );
     if (!banners?.length) return;
-    const mostExpensiveBanner = banners.reduce((max, item) => item.price > max.price ? item : max);
+    const mostExpensiveBanner = banners.reduce((max, item) =>
+      item.price > max.price ? item : max,
+    );
 
     const bannerMap: { [key: string]: DisplayBanner } = {
       diamondbanner: {
-        style: "bg-[#00d3f2] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#a2f4fd] h-[150px] w-full rounded-xl",
+        style:
+          "bg-[#00d3f2] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#a2f4fd] h-[150px] w-full rounded-xl",
         content: "Congratulations on your Diamond Banner",
       },
       emeraldbanner: {
-        style: "bg-[#009966] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#5ee9b5] h-[150px] w-full rounded-xl",
+        style:
+          "bg-[#009966] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#5ee9b5] h-[150px] w-full rounded-xl",
         content: "Congratulations on your Emerald Banner",
       },
       goldbanner: {
-        style: "bg-[#FFD700] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#fff085] h-[150px] w-full rounded-xl",
+        style:
+          "bg-[#FFD700] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#fff085] h-[150px] w-full rounded-xl",
         content: "Congratulations on your Gold Banner",
       },
       bronzebanner: {
-        style: "bg-[#9E5E23] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#E0AF7D] h-[150px] w-full rounded-xl",
+        style:
+          "bg-[#9E5E23] p-4 flex items-center justify-center font-bold text-white shadow-lg text-2xl border-[10px] text-center border-[#E0AF7D] h-[150px] w-full rounded-xl",
         content: "Congratulations on your Bronze Banner",
       },
     };
 
-    const bannerKey = mostExpensiveBanner?.name?.toLowerCase()?.replace(/\s/g, "");
+    const bannerKey = mostExpensiveBanner?.name
+      ?.toLowerCase()
+      ?.replace(/\s/g, "");
     if (bannerKey && bannerMap[bannerKey]) setBanner(bannerMap[bannerKey]);
   };
 
@@ -95,50 +113,52 @@ const Home = () => {
     <div className="min-h-screen w-full bg-slate-50 font-sans pb-16">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');`}</style>
 
-      {/* Top accent bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-blue-800 via-blue-500 to-blue-400" />
-
-      {/* Page header */}
-      <div className="w-full bg-white border-b border-gray-200 px-8 md:px-16 py-8">
-        <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-500 mb-1">
-          SAT Prep · Dashboard
-        </p>
+      <PageHeader>
+        <PageHeader.Eyebrow>SAT Prep · Dashboard</PageHeader.Eyebrow>
         {user ? (
-          <h1
-            className="text-4xl md:text-5xl text-gray-900 leading-tight"
-            style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
-          >
+          <PageHeader.Title>
             {greeting ? `${greeting}` : "Welcome back"},{" "}
             <span className="text-blue-500">{user?.name?.split(" ")[0]}.</span>
-          </h1>
+          </PageHeader.Title>
         ) : (
           <Skeleton className="w-64 md:w-96 h-12 rounded-full bg-gray-200" />
         )}
         {user ? (
-          <p className="text-sm text-gray-500 font-light mt-1">
+          <PageHeader.Description>
             Choose what to study and start practicing.
-          </p>
+          </PageHeader.Description>
         ) : (
           <Skeleton className="w-48 h-4 mt-2 rounded-full bg-gray-200" />
         )}
-      </div>
+      </PageHeader>
 
       <div className="px-8 md:px-16 py-8 space-y-6">
-
         {/* Quick nav options */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {user ? (
-            <Option icon={<Book size={16} />} header="English" redirect="/practice/english" />
+            <Option
+              icon={<Book size={16} />}
+              header="English"
+              redirect="/practice/english"
+            />
           ) : (
             <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <Option icon={<Sigma size={16} />} header="Math" redirect="/practice/math" />
+            <Option
+              icon={<Sigma size={16} />}
+              header="Math"
+              redirect="/practice/math"
+            />
           ) : (
             <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <Option icon={<Calendar size={16} />} header="Study Plan" redirect="/dashboard/study-plan" />
+            <Option
+              icon={<Calendar size={16} />}
+              header="Study Plan"
+              redirect="/dashboard/study-plan"
+            />
           ) : (
             <Skeleton className="w-full h-16 rounded-2xl bg-gray-200" />
           )}
@@ -146,7 +166,6 @@ const Home = () => {
 
         {/* Profile card */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-
           {/* Avatar + info */}
           <div className="flex items-center gap-5">
             <div className="relative shrink-0">
@@ -185,7 +204,9 @@ const Home = () => {
                   >
                     {user?.name}
                   </p>
-                  <p className="text-xs text-gray-400 font-light mt-0.5">{user?.email}</p>
+                  <p className="text-xs text-gray-400 font-light mt-0.5">
+                    {user?.email}
+                  </p>
                 </>
               ) : (
                 <>
@@ -234,17 +255,35 @@ const Home = () => {
         {/* Stats row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {user ? (
-            <StatDisplay type="coins" color="#3b82f6" icon="coin" header="DailySAT Coins" number={userCoins} />
+            <StatDisplay
+              type="coins"
+              color="#3b82f6"
+              icon="coin"
+              header="DailySAT Coins"
+              number={userCoins}
+            />
           ) : (
             <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <StatDisplay type="correct" color="#22c55e" icon="checked" header="Correct Answers" number={user?.correctAnswered ?? 0} />
+            <StatDisplay
+              type="correct"
+              color="#22c55e"
+              icon="checked"
+              header="Correct Answers"
+              number={user?.correctAnswered ?? 0}
+            />
           ) : (
             <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
           {user ? (
-            <StatDisplay type="mistakes" color="#ef4444" icon="cross" header="Mistakes" number={user?.wrongAnswered ?? 0} />
+            <StatDisplay
+              type="mistakes"
+              color="#ef4444"
+              icon="cross"
+              header="Mistakes"
+              number={user?.wrongAnswered ?? 0}
+            />
           ) : (
             <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
           )}
@@ -260,7 +299,13 @@ const Home = () => {
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             {user ? (
               <Link href="/shop" className="w-full block">
-                <StatDisplay type="items" color="#3b82f6" icon="shop" header="Shop" number={user?.itemsBought?.length ?? 0} />
+                <StatDisplay
+                  type="items"
+                  color="#3b82f6"
+                  icon="shop"
+                  header="Shop"
+                  number={user?.itemsBought?.length ?? 0}
+                />
               </Link>
             ) : (
               <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
@@ -269,14 +314,15 @@ const Home = () => {
         </div>
 
         {/* Banner */}
-        {user?.itemsBought?.some((item) => item.name.includes("Banner")) && banner?.style && (
-          <div className={banner.style}>
-            <p>
-              {banner.content}
-              {user?.name ? `, ${user.name.split(" ")[0]}!` : "!"}
-            </p>
-          </div>
-        )}
+        {user?.itemsBought?.some((item) => item.name.includes("Banner")) &&
+          banner?.style && (
+            <div className={banner.style}>
+              <p>
+                {banner.content}
+                {user?.name ? `, ${user.name.split(" ")[0]}!` : "!"}
+              </p>
+            </div>
+          )}
       </div>
     </div>
   );
