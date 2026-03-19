@@ -9,14 +9,12 @@ import { useUserStore } from "@/stores/user";
 export default function ItemGrid() {
   const user = useUserStore((state) => state.user);
   const grid = useGridStore((state) => state.grid);
+
   if (!user || user.currency === -1) {
     return (
-      <div className="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
         {Array.from({ length: 4 }).map((_, idx) => (
-          <Skeleton
-            key={idx}
-            className="flex flex-col items-center justify-center w-full h-[200px]"
-          />
+          <Skeleton key={idx} className="w-full h-48 rounded-2xl bg-gray-200" />
         ))}
       </div>
     );
@@ -24,8 +22,12 @@ export default function ItemGrid() {
 
   return (
     <>
-      <p className="text-gray-500 text-center mt-2">{Notes[grid]}</p>
-      <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2">
+      {Notes[grid] && (
+        <p className="text-xs font-medium text-gray-400 text-center tracking-wide">
+          {Notes[grid]}
+        </p>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {Items[grid].map((item: ShopItem, index: number) => (
           <ShopItemDisplay
             key={index}
