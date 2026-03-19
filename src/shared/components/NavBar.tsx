@@ -68,7 +68,7 @@ const NavBar = () => {
       <nav className="w-full flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center text-xl font-bold text-blue-600"
+          className="flex items-center text-xl"
         >
           <Image
             src="/logo/dailysat.png"
@@ -77,7 +77,6 @@ const NavBar = () => {
             alt="DailySAT Logo"
             className="drop-shadow-sm"
           />
-          <span className="ml-2 tracking-tight">DailySAT</span>
         </Link>
 
         {/* Mobile Toggle */}
