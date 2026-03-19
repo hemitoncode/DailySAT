@@ -88,6 +88,7 @@ const AI = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 font-sans">
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');`}</style>
       {step === 1 ? (
         <div className="flex flex-col min-h-screen w-full">
           {/* Top accent bar */}
@@ -98,9 +99,12 @@ const AI = () => {
             <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-500 mb-2">
               SAT Prep · AI Powered
             </p>
-            <h1 className="text-4xl font-normal text-gray-900 tracking-tight leading-tight mb-2">
+            <h1
+              className="text-5xl text-gray-900 leading-tight mb-2"
+              style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+            >
               Build your{" "}
-              <em className="italic not-italic font-normal text-blue-500">study plan.</em>
+              <span className="text-blue-500">study plan.</span>
             </h1>
             <p className="text-sm text-gray-500 font-light">
               Enter your scores and test date — we'll generate a personalized day-by-day SAT roadmap in seconds.
