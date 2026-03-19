@@ -6,9 +6,7 @@ export default function ShopHeader() {
   const user = useUserStore((state) => state.user);
 
   if (!user) {
-    return (
-      <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
-    );
+    return <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />;
   }
 
   return (
@@ -19,14 +17,14 @@ export default function ShopHeader() {
       <div className="absolute -bottom-6 right-40 w-28 h-28 rounded-full bg-white/5" />
 
       <div className="relative z-10">
-        <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-blue-200 mb-1">
-          Welcome back
-        </p>
         <p
           className="text-4xl text-white leading-tight"
           style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
         >
-          {user?.name.split(" ").length === 2 ? user.name.split(" ")[0] : user.name}!
+          {user?.name.split(" ").length === 2
+            ? user.name.split(" ")[0]
+            : user.name}
+          !
         </p>
         <p className="text-sm text-blue-200 font-light mt-1 max-w-xs">
           Pick up something new to help you study and improve your score.
