@@ -175,56 +175,6 @@ const InventoryPage = () => {
                     </span>
                   </div>
                 </div>
-
-                <div className="rounded-3xl border border-gray-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-600">
-                    Ledger recap
-                  </p>
-                  <ul className="mt-4 space-y-3">
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-400" />
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">
-                          {formatCoins(spent)}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          Total coins spent so far
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">
-                          {uniqueCategories
-                            ? "Animal icons unlocked"
-                            : "Grab your first icon"}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          Collection variety snapshot
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400" />
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">
-                          {categoryStyles[topCategory].label}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          Most collected category
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
-                  <Link
-                    href="/shop"
-                    className="mt-6 inline-flex items-center text-sm font-semibold text-blue-600"
-                  >
-                    Visit the Shop
-                    <span className="ml-2">→</span>
-                  </Link>
-                </div>
               </section>
             )}
 
