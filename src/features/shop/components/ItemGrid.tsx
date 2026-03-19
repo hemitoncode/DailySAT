@@ -21,7 +21,7 @@ export default function ItemGrid() {
   return (
     <>
       {Notes.animal && (
-        <p className="text-xs font-medium text-gray-400 text-center tracking-wide">
+        <p className="text-xs font-medium text-gray-400 text-center tracking-wide mt-4 mb-6 md:mb-8">
           {Notes.animal}
         </p>
       )}

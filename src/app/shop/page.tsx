@@ -51,7 +51,7 @@ export default function Shop() {
         )}
       </PageHeader>
 
-      <div className="px-8 md:px-16 py-8 mt-12">
+      <div className="px-8 md:px-16 py-8 mt-8">
         <ItemGrid />
       </div>
 
