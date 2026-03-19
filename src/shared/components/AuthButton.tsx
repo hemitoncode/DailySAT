@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { signOut } from "@/services/auth/auth/authClient";
 import { determineAuthStatus } from "@/services/auth/auth/authStatus";
