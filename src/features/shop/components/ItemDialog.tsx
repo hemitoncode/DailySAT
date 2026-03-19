@@ -26,37 +26,44 @@ export default function ItemDialog({ user }: { user: any }) {
               return;
             }
           }}
-          className="absolute bg-white p-2 rounded-full bottom-1 left-1"
+          className="absolute bottom-2 left-2 w-8 h-8 bg-white border border-gray-200 rounded-xl flex items-center justify-center hover:border-blue-300 hover:bg-blue-50 transition cursor-pointer"
         >
-          <Store color="#F5863F" />
+          <Store size={16} className="text-blue-500" />
         </div>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+
+      <AlertDialogContent className="rounded-2xl border border-gray-200 shadow-xl">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-center text-2xl">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+              <Store size={14} className="text-blue-500" />
+            </div>
+            <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-500">
+              Inventory
+            </p>
+          </div>
+          <AlertDialogTitle className="text-2xl font-bold text-gray-900 tracking-tight">
             Your Items
           </AlertDialogTitle>
-          <AlertDialogDescription className="max-h-[300px] overflow-auto space-y-4">
-            {user.itemsBought.map((item: any, index: number) => (
-              <div
-                key={index}
-                className="flex justify-between bg-[#4D68C3] text-white rounded-lg p-4"
-              >
-                <span className="w-1/3 text-center">
-                  <b>Price:</b> {item.price} coins
-                </span>
-                <span className="w-1/6 text-center">
-                  <b>Amnt:</b> {item.amnt}
-                </span>
-                <span className="w-1/2 text-center">
-                  <b>Name:</b> {item.name}
-                </span>
-              </div>
-            ))}
+          <AlertDialogDescription asChild>
+            <div className="max-h-[300px] overflow-auto space-y-2 mt-2">
+              {user.itemsBought.map((item: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center bg-slate-50 border border-gray-200 rounded-xl px-4 py-3"
+                >
+                  <span className="text-xs font-semibold text-gray-900 w-1/2 truncate">{item.name}</span>
+                  <span className="text-xs text-gray-500 w-1/4 text-center">×{item.amnt}</span>
+                  <span className="text-xs font-semibold text-blue-500 w-1/4 text-right">{item.price} coins</span>
+                </div>
+              ))}
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Close</AlertDialogCancel>
+        <AlertDialogFooter className="mt-2">
+          <AlertDialogCancel className="w-full rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-slate-50 hover:text-gray-900 transition">
+            Close
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
