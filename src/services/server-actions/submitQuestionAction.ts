@@ -45,6 +45,18 @@ export const handleSubmitQuestion = async (
     await usersColl.updateOne(
       { email },
       {
+        $setOnInsert: {
+          email,
+          name: session?.user?.name ?? "",
+          image: session?.user?.image ?? "",
+          currency: 0,
+          correctAnswered: 0,
+          wrongAnswered: 0,
+          points: 0,
+          isReferred: false,
+          itemsBought: [],
+          investors: [],
+        },
         $inc: {
           currency: rewardAmount,
           correctAnswered: correctIncrement,
@@ -52,6 +64,7 @@ export const handleSubmitQuestion = async (
           points: pointsIncrement,
         },
       },
+      { upsert: true },
     );
     // Get updated user data for leaderboard
     const updatedUser = await usersColl.findOne({ email });
