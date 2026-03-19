@@ -5,7 +5,6 @@ import { useGridStore } from "@/stores/shop";
 import { GridType } from "@/features/shop/types/grid";
 
 const tabs: { key: GridType; label: string }[] = [
-  { key: "investor", label: "Investor" },
   { key: "animal", label: "Animal Icon" },
   { key: "banners", label: "Banners" },
 ];

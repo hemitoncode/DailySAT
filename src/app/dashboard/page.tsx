@@ -290,7 +290,7 @@ const Home = () => {
         </div>
 
         {/* Referral + Shop row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {!user?.isReferred && (
             <div className="bg-white border border-gray-200 rounded-2xl p-5">
               <RedeemReferral />
@@ -311,6 +311,31 @@ const Home = () => {
               <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
             )}
           </div>
+          {user ? (
+            <Link
+              href="/dashboard/inventory"
+              className="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-blue-200"
+            >
+              <p className="text-[10px] uppercase tracking-[0.35em] text-blue-500">
+                Collection log
+              </p>
+              <p
+                className="text-3xl leading-tight text-slate-900"
+                style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+              >
+                Visit your vault
+              </p>
+              <p className="text-sm text-slate-500">
+                {user?.itemsBought?.length ?? 0} curated items waiting.
+              </p>
+              <span className="mt-auto inline-flex items-center text-xs font-semibold uppercase tracking-[0.4em] text-blue-600">
+                Open ledger
+                <span className="ml-2 text-base">→</span>
+              </span>
+            </Link>
+          ) : (
+            <Skeleton className="w-full h-36 rounded-2xl bg-gray-200" />
+          )}
         </div>
 
         {/* Banner */}

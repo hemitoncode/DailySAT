@@ -3,7 +3,6 @@
 import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
 import { db } from "@/services/database/mongo";
 import { handleGetSession } from "@/services/auth/auth/authActions";
-import { Investor } from "@/features/shop/types/investor";
 import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 import { User } from "@/shared/types/user";
 
@@ -30,20 +29,8 @@ export const handleSubmitQuestion = async (
     const email = baseUser.email;
 
     const usersColl = db.collection<User>("users");
-    let investorRewardBonus = 0;
-
-    const investorItem = baseUser?.investors;
-
-    // Calculate earnings for each investor item
-    investorRewardBonus =
-      investorItem?.reduce((total: number, investor: Investor) => {
-        const amnt = investor.amnt ?? 1;
-        const reward = investor.reward ?? 0;
-        return total + amnt * reward;
-      }, 0) ?? 0;
-
     const rewardAmount = isCorrect
-      ? (coinReward ?? QUESTION_IS_CORRECT_POINTS) + investorRewardBonus
+      ? (coinReward ?? QUESTION_IS_CORRECT_POINTS)
       : 0;
 
     const correctIncrement = isCorrect ? 1 : 0;
@@ -78,7 +65,6 @@ export const handleSubmitQuestion = async (
             wrongAnswered: updatedUser.wrongAnswered,
             points: updatedUser.points,
             itemsBought: updatedUser.itemsBought,
-            investors: updatedUser.investors,
             isReferred: updatedUser.isReferred,
           }
         : undefined,

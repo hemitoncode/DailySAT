@@ -1,7 +1,6 @@
 // User interface representing a user in the system
 
 import { ShopItem } from "@/features/shop/types/shopItem";
-import { Investor } from "@/features/shop/types/investor";
 import { ObjectId } from "mongodb";
 
 export interface User {
@@ -21,7 +20,6 @@ export interface User {
   wrongAnswered: number;
   // Items bought
   itemsBought: ShopItem[];
-  investors?: Investor[];
 
   // Performance points
   points: number;

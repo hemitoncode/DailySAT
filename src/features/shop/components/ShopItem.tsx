@@ -16,13 +16,19 @@ interface ComponentShopItem {
   dispatch?: (_action: { type: string; payload?: string }) => void;
 }
 
-const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) => {
+const ShopItemDisplay: React.FC<ComponentShopItem> = ({
+  name,
+  purpose,
+  price,
+}) => {
   const { state, increment, decrement } = useShop();
   const user = useUserStore((s) => s.user);
 
   useEffect(() => {
     const handleGetItems = (e: Event) => {
-      window.dispatchEvent(new CustomEvent("buy-items", { detail: { items: state } }));
+      window.dispatchEvent(
+        new CustomEvent("buy-items", { detail: { items: state } }),
+      );
     };
     window.addEventListener("get-items-to-buy", handleGetItems);
     return () => window.removeEventListener("get-items-to-buy", handleGetItems);
@@ -30,19 +36,23 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
 
   const bannerMap: { [key: string]: DisplayBanner } = {
     diamondbanner: {
-      style: "bg-[#00d3f2] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#a2f4fd] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
+      style:
+        "bg-[#00d3f2] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#a2f4fd] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
       content: "Congratulations on your Diamond Banner",
     },
     emeraldbanner: {
-      style: "bg-[#009966] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#5ee9b5] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
+      style:
+        "bg-[#009966] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#5ee9b5] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
       content: "Congratulations on your Emerald Banner",
     },
     goldbanner: {
-      style: "bg-[#FFD700] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#fff085] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
+      style:
+        "bg-[#FFD700] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#fff085] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
       content: "Congratulations on your Gold Banner",
     },
     bronzebanner: {
-      style: "bg-[#9E5E23] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#E0AF7D] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
+      style:
+        "bg-[#9E5E23] p-1 flex items-center justify-center font-bold text-white shadow-lg border-[4px] text-center border-[#E0AF7D] w-[80px] h-[30px] absolute top-3 right-3 rounded-xl",
       content: "Congratulations on your Bronze Banner",
     },
   };
@@ -52,11 +62,10 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
 
   const isIncrementDisabled =
     !user ||
-    price > user?.currency! ||
-    (!name.toLowerCase().replace(/\s/g, "").includes("investor") &&
-      user?.itemsBought &&
-      user?.itemsBought.some((item: ShopItem) => item.name === name)) ||
-    (!name.toLowerCase().replace(/\s/g, "").includes("investor") && qty === 1);
+    price > (user?.currency ?? 0) ||
+    (user?.itemsBought?.some((item: ShopItem) => item.name === name) ??
+      false) ||
+    qty === 1;
 
   const isDecrementDisabled = qty === 0;
 
@@ -74,16 +83,20 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
       )}
 
       {/* Banner swatch */}
-      {name.includes("Banner") && (
-        <div className={bannerMap[itemKey]?.style} />
-      )}
+      {name.includes("Banner") && <div className={bannerMap[itemKey]?.style} />}
 
       {/* Item info */}
       <div>
         <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-blue-500 mb-1">
-          {name.includes("Banner") ? "Banner" : name.includes("Icon") ? "Icon" : "Item"}
+          {name.includes("Banner")
+            ? "Banner"
+            : name.includes("Icon")
+              ? "Icon"
+              : "Item"}
         </p>
-        <h2 className="text-lg font-bold text-gray-900 leading-tight">{name}</h2>
+        <h2 className="text-lg font-bold text-gray-900 leading-tight">
+          {name}
+        </h2>
         <p className="text-sm text-gray-500 font-light mt-1">
           {purpose || "No description available."}
         </p>
@@ -92,9 +105,14 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
       {/* Price + quantity row */}
       <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
         <div>
-          <p className="text-[10px] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-0.5">Price</p>
-          <p className="text-xl font-bold text-blue-500 leading-none">{price}
-            <span className="text-xs font-medium text-gray-400 ml-1">coins</span>
+          <p className="text-[10px] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-0.5">
+            Price
+          </p>
+          <p className="text-xl font-bold text-blue-500 leading-none">
+            {price}
+            <span className="text-xs font-medium text-gray-400 ml-1">
+              coins
+            </span>
           </p>
         </div>
 
@@ -104,7 +122,9 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
             onClick={() => {
               if (isDecrementDisabled) return;
               decrement(name);
-              window.dispatchEvent(new CustomEvent("user-updated", { detail: { price } }));
+              window.dispatchEvent(
+                new CustomEvent("user-updated", { detail: { price } }),
+              );
             }}
             disabled={isDecrementDisabled}
             className={`w-7 h-7 rounded-lg flex items-center justify-center border transition ${
@@ -124,7 +144,9 @@ const ShopItemDisplay: React.FC<ComponentShopItem> = ({ name, purpose, price }) 
             onClick={() => {
               if (isIncrementDisabled) return;
               increment(name);
-              window.dispatchEvent(new CustomEvent("user-updated", { detail: { price: -price } }));
+              window.dispatchEvent(
+                new CustomEvent("user-updated", { detail: { price: -price } }),
+              );
             }}
             disabled={isIncrementDisabled}
             className={`w-7 h-7 rounded-lg flex items-center justify-center border transition ${
