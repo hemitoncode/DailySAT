@@ -4,6 +4,7 @@ import { db } from "@/services/database/mongo";
 import { User } from "@/shared/types/user";
 import { handleGetSession } from "@/services/auth/auth/authActions";
 import { ensureUserDocument } from "@/services/user/ensureUserDocument";
+import { Filter } from "mongodb";
 
 const ensurePositiveInteger = (value: unknown) => {
   const parsed = Number(value);
@@ -141,12 +142,22 @@ export const POST = async (request: Request) => {
     while (attempts < MAX_ATTEMPTS) {
       const merged = mergeCollections(baseItems, normalizedItems);
 
+      const filter: Filter<User> = {
+        email: user.email,
+        currency: { $gte: totalCost },
+      };
+
+      if (baseItems.length) {
+        filter.itemsBought = baseItems;
+      } else {
+        filter.$or = [
+          { itemsBought: baseItems },
+          { itemsBought: { $exists: false } },
+        ];
+      }
+
       updatedUser = await users.findOneAndUpdate(
-        {
-          email: user.email,
-          currency: { $gte: totalCost },
-          itemsBought: baseItems,
-        },
+        filter,
         {
           $inc: { currency: -totalCost },
           $set: { itemsBought: merged },
@@ -179,6 +190,12 @@ export const POST = async (request: Request) => {
     }
 
     if (!updatedUser) {
+      console.warn("[shop] purchase concurrency failure", {
+        email: user.email,
+        attempts,
+        baseItemsCount: baseItems.length,
+        normalizedItemsCount: normalizedItems.length,
+      });
       return Response.json(
         {
           result: "Unable to complete purchase",

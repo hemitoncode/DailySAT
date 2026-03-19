@@ -33,6 +33,17 @@ export const ensureUserDocument = async (
 
   const existingUser = await usersCollection.findOne({ email });
   if (existingUser) {
+    if (!Array.isArray(existingUser.itemsBought)) {
+      await usersCollection.updateOne(
+        existingUser._id ? { _id: existingUser._id } : { email },
+        { $set: { itemsBought: [] } },
+      );
+      return {
+        ...existingUser,
+        itemsBought: [],
+      };
+    }
+
     return existingUser;
   }
 
