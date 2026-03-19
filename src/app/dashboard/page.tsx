@@ -105,7 +105,7 @@ const Home = () => {
   }, []);
 
   const handleCopyReferral = async () => {
-    const referralCode = user?._id ?? "";
+    const referralCode = user?._id?.toString() ?? "";
     await navigator.clipboard.writeText(referralCode);
   };
 
@@ -222,7 +222,7 @@ const Home = () => {
                       height={100}
                     />
                   </button>
-                  {user?._id || "Unavailable"}
+                  {user?._id?.toString() ?? "Unavailable"}
                 </p>
               </>
             ) : (
