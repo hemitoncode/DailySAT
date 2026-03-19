@@ -11,14 +11,13 @@ import { useUserStore } from "@/stores/user";
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { cn } from "@/utils/utils";
 
-type InventoryCategory = "icons" | "banners" | "collectibles";
+type InventoryCategory = "icons" | "banners";
 type FilterKey = InventoryCategory | "all";
 
 const filterOptions: { key: FilterKey; label: string; note: string }[] = [
   { key: "all", label: "All items", note: "Everything you own" },
   { key: "icons", label: "Icons", note: "Dashboard companions" },
   { key: "banners", label: "Banners", note: "Status ribbons" },
-  { key: "collectibles", label: "Artifacts", note: "Misc rewards" },
 ];
 
 const categoryStyles: Record<
@@ -35,17 +34,12 @@ const categoryStyles: Record<
     badge: "bg-sky-50 text-sky-700 border-sky-100",
     dot: "bg-sky-400",
   },
-  collectibles: {
-    label: "Collectible",
-    badge: "bg-rose-50 text-rose-700 border-rose-100",
-    dot: "bg-rose-400",
-  },
 };
 
 const categorizeItem = (item: ShopItem): InventoryCategory => {
   if (/icon/i.test(item.name)) return "icons";
   if (/banner/i.test(item.name)) return "banners";
-  return "collectibles";
+  return "icons";
 };
 
 const formatCoins = (value: number) =>
@@ -104,7 +98,6 @@ const InventoryPage = () => {
     const counts: Record<InventoryCategory, number> = {
       icons: 0,
       banners: 0,
-      collectibles: 0,
     };
     let lifetimeSpend = 0;
 
@@ -115,8 +108,7 @@ const InventoryPage = () => {
     });
 
     const top =
-      Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ??
-      "collectibles";
+      Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "icons";
     const unique = Object.values(counts).filter((count) => count > 0).length;
     const averageCost =
       collection.length > 0 ? Math.round(lifetimeSpend / collection.length) : 0;
@@ -143,16 +135,14 @@ const InventoryPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-50 font-sans pb-16">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');`}</style>
-
       <PageHeader>
         <PageHeader.Eyebrow>DailySAT · Inventory</PageHeader.Eyebrow>
         <PageHeader.Title>
           Review your <span className="text-blue-500">collection.</span>
         </PageHeader.Title>
         <PageHeader.Description>
-          Every banner, icon, and collectible lives here. Keep tabs on what you
-          own and what&rsquo;s left to unlock.
+          Every banner and icon lives here. Keep tabs on what you own and
+          what&rsquo;s left to unlock.
         </PageHeader.Description>
       </PageHeader>
 
@@ -181,7 +171,7 @@ const InventoryPage = () => {
               />
               <StatCard
                 label="Categories owned"
-                value={`${uniqueCategories}/3`}
+                value={`${uniqueCategories}/2`}
                 detail={`${categoryStyles[topCategory].label} is dominant`}
               />
             </section>
@@ -192,10 +182,7 @@ const InventoryPage = () => {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
                     Spotlight item
                   </p>
-                  <h2
-                    className="mt-2 text-3xl text-slate-900"
-                    style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-                  >
+                  <h2 className="mt-2 text-3xl text-slate-900">
                     {heroItem.name}
                   </h2>
                   <p className="mt-2 text-sm text-slate-600">
@@ -237,8 +224,8 @@ const InventoryPage = () => {
                       <div>
                         <p className="text-sm font-semibold text-slate-900">
                           {uniqueCategories
-                            ? `${uniqueCategories} of 3 categories`
-                            : "Collect something new"}
+                            ? `${uniqueCategories} of 2 categories`
+                            : "Grab your first icon"}
                         </p>
                         <p className="text-xs text-slate-500">
                           Collection variety snapshot
@@ -392,12 +379,7 @@ const InventoryCard = ({ item, index }: { item: ShopItem; index: number }) => {
           #{index + 1}
         </span>
       </div>
-      <h3
-        className="mt-4 text-2xl text-slate-900"
-        style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-      >
-        {item.name}
-      </h3>
+      <h3 className="mt-4 text-2xl text-slate-900">{item.name}</h3>
       <p className="mt-2 text-sm text-slate-600">{item.purpose}</p>
       <div className="mt-5 grid gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
         <span className="rounded-full border border-gray-200 px-3 py-1">
@@ -426,12 +408,7 @@ const StatCard = ({
     <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
       {label}
     </p>
-    <p
-      className="mt-2 text-3xl text-slate-900"
-      style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-    >
-      {value}
-    </p>
+    <p className="mt-2 text-3xl text-slate-900">{value}</p>
     <p className="text-sm text-slate-500">{detail}</p>
   </div>
 );
@@ -456,15 +433,10 @@ const EmptyState = () => (
     <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-blue-500">
       No items yet
     </p>
-    <p
-      className="mt-3 text-3xl text-slate-900"
-      style={{ fontFamily: "'Fraunces', 'Caveat', cursive" }}
-    >
-      Start filling your vault
-    </p>
+    <p className="mt-3 text-3xl text-slate-900">Start filling your vault</p>
     <p className="mt-2 text-sm text-slate-500">
-      Purchases from the shop will appear here instantly. Icons, banners,
-      collectibles… grab your first one to unlock this ledger.
+      Purchases from the shop will appear here instantly. Icons or banners… grab
+      your first one to unlock this ledger.
     </p>
     <Link
       href="/shop"
