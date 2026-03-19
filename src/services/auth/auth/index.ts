@@ -30,6 +30,11 @@ export const auth = betterAuth({
         required: true,
         defaultValue: 0,
       },
+      points: {
+        type: "number",
+        required: true,
+        defaultValue: 0,
+      },
       wrongQuestions: {
         type: "number",
         required: true,

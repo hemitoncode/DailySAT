@@ -107,6 +107,7 @@ export const GET = async () => {
         image: session?.user.image,
         id: session?.user.id,
         currency: 0,
+        points: 0,
         wrongAnswered: 0,
         correctAnswered: 0,
         isReferred: false,

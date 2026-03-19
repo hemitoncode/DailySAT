@@ -38,22 +38,33 @@ export const handleSubmitQuestion = async (
       ? (coinReward ?? QUESTION_IS_CORRECT_POINTS) + investorRewardBonus
       : 0;
 
+    const correctIncrement = isCorrect ? 1 : 0;
+    const wrongIncrement = isCorrect ? 0 : 1;
+    const pointsIncrement = isCorrect ? 1 : -1;
+
     await usersColl.updateOne(
       { email },
       {
         $inc: {
           currency: rewardAmount,
-          correctAnswered: isCorrect ? 1 : 0,
-          wrongAnswered: !isCorrect ? 1 : 0,
+          correctAnswered: correctIncrement,
+          wrongAnswered: wrongIncrement,
+          points: pointsIncrement,
         },
       },
     );
     // Get updated user data for leaderboard
     const updatedUser = await usersColl.findOne({ email });
-    const league = determineLeague(updatedUser?.points);
+    const correctAnswered = updatedUser?.correctAnswered ?? 0;
+    const wrongAnswered = updatedUser?.wrongAnswered ?? 0;
+    const userScore =
+      typeof updatedUser?.points === "number"
+        ? updatedUser.points
+        : correctAnswered - wrongAnswered;
+    const league = determineLeague(userScore);
     if (updatedUser && league !== "None") {
       const userData = {
-        score: updatedUser.points,
+        score: userScore,
         username: updatedUser.name || "Anonymous User",
         league: league,
       };
