@@ -28,10 +28,7 @@ const PageHeaderRoot = ({
         )}
       />
       <div
-        className={cn(
-          "w-full bg-white border-b border-gray-200 px-8 md:px-16 py-8",
-          contentClassName,
-        )}
+        className={cn("w-full bg-white px-8 md:px-16 py-8", contentClassName)}
       >
         {children}
       </div>
