@@ -6,10 +6,6 @@ type CartState = { [key: string]: number };
 
 // Map of item IDs to their names and prices
 const namePriceMap: { [key: string]: [string, number, string] } = {
-  coininvestori: ["Coin Investor I", 120, "Earn 5 coins daily"],
-  coininvestorii: ["Coin Investor II", 230, "Earn 10 coins daily"],
-  coininvestoriii: ["Coin Investor III", 350, "Earn 15 coins daily"],
-  coininvestoriv: ["Coin Investor IV", 460, "Earn 20 coins daily"],
   owlicon: ["Owl Icon", 300, "Display an owl icon on your profile"],
   tigericon: ["Tiger Icon", 400, "Display a tiger icon on your profile"],
   sharkicon: ["Shark Icon", 350, "Display a shark icon on your profile"],
@@ -33,10 +29,6 @@ const namePriceMap: { [key: string]: [string, number, string] } = {
 };
 
 const initialState: CartState = {
-  coininvestori: 0,
-  coininvestorii: 0,
-  coininvestoriii: 0,
-  coininvestoriv: 0,
   owlicon: 0,
   tigericon: 0,
   sharkicon: 0,

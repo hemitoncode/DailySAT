@@ -18,7 +18,6 @@ const DEFAULT_USER: Omit<User, "_id"> = {
   wrongAnswered: 0,
   points: 0,
   itemsBought: [],
-  investors: [],
 };
 
 export const ensureUserDocument = async (
@@ -43,7 +42,6 @@ export const ensureUserDocument = async (
     name: sessionUser?.name ?? "",
     image: sessionUser?.image ?? "",
     itemsBought: [],
-    investors: [],
   };
 
   const insertResult = await usersCollection.insertOne({

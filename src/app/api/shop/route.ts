@@ -1,7 +1,6 @@
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { db } from "@/services/database/mongo";
 import { User } from "@/shared/types/user";
-import { format } from "date-fns";
 import { handleGetSession } from "@/services/auth/auth/authActions";
 import { ensureUserDocument } from "@/services/user/ensureUserDocument";
 
@@ -46,21 +45,6 @@ export const POST = async (request: Request) => {
       });
     }
 
-    const formattedDate = format(new Date(), "MM/dd/yyyy");
-    const investorItems = items
-      .filter((elem: ShopItem) => elem.name.includes("Investor"))
-      .map((elem: ShopItem) => ({
-        ...elem,
-        date: formattedDate,
-        reward: elem.name.includes("IV")
-          ? 20
-          : elem.name.includes("III")
-            ? 15
-            : elem.name.includes("II")
-              ? 10
-              : 5,
-      }));
-
     const updateDoc: any = {
       $inc: { currency: -totalCost },
       $push: {
@@ -69,12 +53,6 @@ export const POST = async (request: Request) => {
         },
       },
     };
-
-    if (investorItems.length) {
-      updateDoc.$push.investors = {
-        $each: investorItems,
-      };
-    }
 
     const updatedUser = await users.findOneAndUpdate(
       { email: user.email, currency: { $gte: totalCost } },
@@ -96,7 +74,6 @@ export const POST = async (request: Request) => {
       user: {
         currency: updatedUser.currency,
         itemsBought: updatedUser.itemsBought,
-        investors: updatedUser.investors,
       },
     });
   } catch {

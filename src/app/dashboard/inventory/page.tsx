@@ -11,14 +11,13 @@ import { useUserStore } from "@/stores/user";
 import { ShopItem } from "@/features/shop/types/shopItem";
 import { cn } from "@/utils/utils";
 
-type InventoryCategory = "icons" | "banners" | "investors" | "collectibles";
+type InventoryCategory = "icons" | "banners" | "collectibles";
 type FilterKey = InventoryCategory | "all";
 
 const filterOptions: { key: FilterKey; label: string; note: string }[] = [
   { key: "all", label: "All items", note: "Everything you own" },
   { key: "icons", label: "Icons", note: "Dashboard companions" },
   { key: "banners", label: "Banners", note: "Status ribbons" },
-  { key: "investors", label: "Investors", note: "Coin drip" },
   { key: "collectibles", label: "Artifacts", note: "Misc rewards" },
 ];
 
@@ -36,11 +35,6 @@ const categoryStyles: Record<
     badge: "bg-sky-50 text-sky-700 border-sky-100",
     dot: "bg-sky-400",
   },
-  investors: {
-    label: "Coin Investor",
-    badge: "bg-purple-50 text-purple-700 border-purple-100",
-    dot: "bg-purple-400",
-  },
   collectibles: {
     label: "Collectible",
     badge: "bg-rose-50 text-rose-700 border-rose-100",
@@ -51,7 +45,6 @@ const categoryStyles: Record<
 const categorizeItem = (item: ShopItem): InventoryCategory => {
   if (/icon/i.test(item.name)) return "icons";
   if (/banner/i.test(item.name)) return "banners";
-  if (/investor/i.test(item.name)) return "investors";
   return "collectibles";
 };
 
@@ -107,35 +100,32 @@ const InventoryPage = () => {
     }, null);
   }, [collection]);
 
-  const { spent, yieldPerDay, uniqueCategories, topCategory } = useMemo(() => {
+  const { spent, uniqueCategories, topCategory, averageCost } = useMemo(() => {
     const counts: Record<InventoryCategory, number> = {
       icons: 0,
       banners: 0,
-      investors: 0,
       collectibles: 0,
     };
     let lifetimeSpend = 0;
-    let investorYield = 0;
 
     collection.forEach((item) => {
       const category = categorizeItem(item);
       counts[category] += 1;
       lifetimeSpend += item.price ?? 0;
-      if (category === "investors") {
-        investorYield += item.reward ?? 0;
-      }
     });
 
     const top =
       Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ??
       "collectibles";
     const unique = Object.values(counts).filter((count) => count > 0).length;
+    const averageCost =
+      collection.length > 0 ? Math.round(lifetimeSpend / collection.length) : 0;
 
     return {
       spent: lifetimeSpend,
-      yieldPerDay: investorYield,
       uniqueCategories: unique,
       topCategory: top as InventoryCategory,
+      averageCost,
     };
   }, [collection]);
 
@@ -161,8 +151,8 @@ const InventoryPage = () => {
           Review your <span className="text-blue-500">collection.</span>
         </PageHeader.Title>
         <PageHeader.Description>
-          Every banner, icon, and investor lives here. Keep tabs on what you own
-          and what&rsquo;s left to unlock.
+          Every banner, icon, and collectible lives here. Keep tabs on what you
+          own and what&rsquo;s left to unlock.
         </PageHeader.Description>
       </PageHeader>
 
@@ -185,13 +175,13 @@ const InventoryPage = () => {
                 detail="Invested into boosts"
               />
               <StatCard
-                label="Daily coin drip"
-                value={yieldPerDay ? `${yieldPerDay} coins/day` : "—"}
-                detail="From investor tier"
+                label="Average item cost"
+                value={averageCost ? formatCoins(averageCost) : "—"}
+                detail="Across your collection"
               />
               <StatCard
                 label="Categories owned"
-                value={`${uniqueCategories}/4`}
+                value={`${uniqueCategories}/3`}
                 detail={`${categoryStyles[topCategory].label} is dominant`}
               />
             </section>
@@ -246,12 +236,12 @@ const InventoryPage = () => {
                       <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-400" />
                       <div>
                         <p className="text-sm font-semibold text-slate-900">
-                          {yieldPerDay
-                            ? `${yieldPerDay} coins/day`
-                            : "Investor upgrade pending"}
+                          {uniqueCategories
+                            ? `${uniqueCategories} of 3 categories`
+                            : "Collect something new"}
                         </p>
                         <p className="text-xs text-slate-500">
-                          Passive income from investor tier
+                          Collection variety snapshot
                         </p>
                       </div>
                     </li>
@@ -418,11 +408,6 @@ const InventoryCard = ({ item, index }: { item: ShopItem; index: number }) => {
             Qty {item.amnt}
           </span>
         )}
-        {item.reward && (
-          <span className="rounded-full border border-gray-200 px-3 py-1">
-            +{item.reward} coins / day
-          </span>
-        )}
       </div>
     </motion.div>
   );
@@ -479,7 +464,7 @@ const EmptyState = () => (
     </p>
     <p className="mt-2 text-sm text-slate-500">
       Purchases from the shop will appear here instantly. Icons, banners,
-      investors… grab your first one to unlock this ledger.
+      collectibles… grab your first one to unlock this ledger.
     </p>
     <Link
       href="/shop"

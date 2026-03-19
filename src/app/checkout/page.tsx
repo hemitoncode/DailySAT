@@ -53,10 +53,6 @@ const Checkout = () => {
 
   // Map of item IDs to their names and prices
   const namePriceMap: { [key: string]: [string, number] } = {
-    coininvestori: ["Coin Investor I", 120],
-    coininvestorii: ["Coin Investor II", 230],
-    coininvestoriii: ["Coin Investor III", 350],
-    coininvestoriv: ["Coin Investor IV", 460],
     owlicon: ["Owl Icon", 300],
     tigericon: ["Tiger Icon", 400],
     sharkicon: ["Shark Icon", 350],
@@ -114,7 +110,7 @@ const Checkout = () => {
             position: "bottom-right",
             pauseOnHover: false,
             autoClose: 1000,
-          }
+          },
         );
 
         setTimeout(() => {
