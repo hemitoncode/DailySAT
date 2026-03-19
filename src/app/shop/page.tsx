@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import UserCoinDisplay from "@/features/shop/components/UserCoinDisplay";
-import ShopHeader from "@/features/shop/components/ShopHeader";
 import ShopGridTabs from "@/features/shop/components/ShopGridTabs";
 import ItemGrid from "@/features/shop/components/ItemGrid";
 import CheckoutButton from "@/features/shop/components/CheckoutButton";
@@ -22,7 +21,9 @@ export default function Shop() {
         const userData: User | undefined = response?.data?.user;
         setUser?.(userData ?? null);
       } catch {
-        toast.error("Sorry, we couldn't retrieve your user account, please try again later");
+        toast.error(
+          "Sorry, we couldn't retrieve your user account, please try again later",
+        );
       }
     };
     handleGetUser();
@@ -47,8 +48,7 @@ export default function Shop() {
             className="text-4xl md:text-5xl text-gray-900 leading-tight"
             style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
           >
-            Browse the{" "}
-            <span className="text-blue-500">shop.</span>
+            Browse the <span className="text-blue-500">shop.</span>
           </h1>
         )}
         {!user ? (
@@ -61,7 +61,6 @@ export default function Shop() {
       </div>
 
       <div className="px-8 md:px-16 py-8 space-y-6">
-        <ShopHeader />
         <ShopGridTabs />
         <ItemGrid />
       </div>
