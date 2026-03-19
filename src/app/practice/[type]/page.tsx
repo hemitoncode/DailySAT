@@ -11,6 +11,7 @@ import {
 import { Difficulty } from "@/features/practice/types/difficulty";
 import { EnglishSubjects, Type } from "@/features/practice/types/subject";
 import { useParams } from "next/navigation";
+import { QUESTION_IS_CORRECT_POINTS } from "@/shared/data/constant";
 
 const PracticePage = () => {
   const params = useParams();
@@ -27,13 +28,16 @@ const PracticePage = () => {
   const [wrongCount, setWrongCount] = useState(0);
   const [currentStreak, setCurrentStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
+  const [coinsEarned, setCoinsEarned] = useState(0);
 
   if (!type) {
     throw new Error("Type query parameter is required");
   }
 
-  const handleAnswered = (isCorrect: boolean) => {
+  const handleAnswered = (isCorrect: boolean, coinReward?: number) => {
     if (isCorrect) {
+      const reward = coinReward ?? QUESTION_IS_CORRECT_POINTS;
+      setCoinsEarned((prev) => prev + reward);
       setCorrectCount((prev) => prev + 1);
       setCurrentStreak((prev) => {
         const updated = prev + 1;
@@ -78,6 +82,7 @@ const PracticePage = () => {
           wrongCount={wrongCount}
           currentStreak={currentStreak}
           maxStreak={maxStreak}
+          coinsEarned={coinsEarned}
         />
       </aside>
     </div>

@@ -26,7 +26,7 @@ interface QuestionContentProps {
   subject: EnglishSubjects;
   type: Type;
   difficulty: Difficulty;
-  onAnswered?: (isCorrect: boolean) => void;
+  onAnswered?: (isCorrect: boolean, coinReward?: number) => void;
 }
 
 const MARKDOWN_PROPS = {
@@ -105,7 +105,7 @@ const QuestionContent: React.FC<QuestionContentProps> = ({
     setShowExplanation(true);
 
     if (onAnswered) {
-      onAnswered(isCorrect);
+      onAnswered(isCorrect, coinReward);
     }
   };
 
