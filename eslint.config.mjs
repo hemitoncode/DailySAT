@@ -5,7 +5,14 @@ import globals from "globals";
 
 export default [
   {
-    ignores: [".next/", "dist/", "node_modules/", "coverage/", "build/"],
+    ignores: [
+      ".next/",
+      "dist/",
+      "node_modules/",
+      "coverage/",
+      "build/",
+      ".npm-cache/",
+    ],
   },
   {
     files: ["**/*.{ts,tsx}"],
