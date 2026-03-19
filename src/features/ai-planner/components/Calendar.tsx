@@ -26,9 +26,10 @@ import { cn } from "@/utils";
 interface CalendarViewProps {
   plan: any;
   testDate?: Date;
+  className?: string;
 }
 
-export function Calendar({ plan, testDate }: CalendarViewProps) {
+export function Calendar({ plan, testDate, className }: CalendarViewProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -96,7 +97,7 @@ export function Calendar({ plan, testDate }: CalendarViewProps) {
   };
 
   return (
-    <div className="w-full rounded-lg border shadow-sm">
+    <div className={cn("w-full rounded-lg border shadow-sm", className)}>
       {/* Header */}
       <div className="px-6 py-4 border-b bg-gray-50">
         <div className="flex items-center justify-between">
